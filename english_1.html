@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>تدريب اختبار الإنجليزي</title>
+<style>
+  body{font-family:system-ui,Tahoma,sans-serif;background:#f3f7f4;margin:0;padding:16px;color:#222}
+  .card{background:#fff;max-width:760px;margin:auto;border-radius:14px;padding:20px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+  h1{font-size:22px;margin:0 0 12px}
+  h2{font-size:20px;line-height:1.7;margin:12px 0}
+  h3{font-size:18px;margin:18px 0 6px;color:#1f6f4a}
+  p,li{line-height:1.9}
+  button{font-size:17px;padding:12px 16px;border:0;border-radius:10px;background:#1f8a5b;color:#fff;cursor:pointer;margin:4px}
+  button.big{display:block;width:100%;margin:8px 0;text-align:right}
+  button.sec{background:#e3efe8;color:#1f4f38}
+  button.opt{display:block;width:100%;text-align:left;direction:ltr;background:#eef5f1;color:#222;border:2px solid #cfe2d7;margin:6px 0}
+  button.sel{border-color:#1f8a5b}
+  button.ok{background:#20a35b;color:#fff;border-color:#20a35b}
+  button.bad{background:#d64545;color:#fff;border-color:#d64545}
+  .en{direction:ltr;text-align:left}
+  .ex{direction:ltr;text-align:left;background:#f6faf7;border-left:4px solid #1f8a5b;padding:8px 12px;margin:6px 0;border-radius:6px;font-family:Georgia,serif}
+  .tip{background:#fff7e0;padding:10px;border-radius:8px;margin:8px 0}
+  .passage{direction:ltr;text-align:left;background:#f6faf7;padding:12px;border-radius:8px;line-height:1.8;font-family:Georgia,serif}
+  .muted{color:#666;font-size:14px}
+  .fb{margin-top:12px;padding:12px;border-radius:8px;background:#fff7e0;line-height:1.8}
+  .pal{display:flex;flex-wrap:wrap;gap:4px;margin:14px 0}
+  .pal button{width:38px;height:38px;padding:0;font-size:13px;margin:0;background:#dfeae3;color:#222}
+  .pal button.done{background:#7fa894;color:#fff}
+  .pal button.cur{background:#f0a500;color:#fff}
+  .row{display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding:6px 0}
+  .wrong{border-bottom:1px solid #eee;padding:10px 0;line-height:1.8}
+  #timer{font-weight:bold;font-size:20px;color:#d64545}
+</style>
+</head>
+<body>
+<div class="card" id="app"></div>
+
+<script>
+// ================= القواعد والشرح =================
+const RULES = [
+{en:'Present Simple vs Present Continuous', ar:'المضارع البسيط والمضارع المستمر', body:`
+<h3>Present Simple</h3>
+<p>نستخدمه للعادات المتكررة والحقائق الثابتة. مع he / she / it نضيف <b>s</b> أو <b>es</b> للفعل.</p>
+<p>كلمات دالة: always, usually, often, every day, never</p>
+<div class="ex">She <b>works</b> in a bank. / Water <b>boils</b> at 100°C.</div>
+<h3>Present Continuous</h3>
+<p>لحدث يحصل الآن أو وضع مؤقت. التركيب: <b>am / is / are + V-ing</b></p>
+<p>كلمات دالة: now, right now, at the moment, today, Look!, Listen!</p>
+<div class="ex">I <b>am studying</b> now. / He usually drives, but today he <b>is walking</b>.</div>
+<div class="tip">أفعال الحالة مثل know, like, want, believe, need لا تأتي عادة بـ ing: نقول I know وليس I am knowing.</div>`},
+
+{en:'Past Simple vs Present Perfect', ar:'الماضي البسيط والمضارع التام', body:`
+<h3>Past Simple</h3>
+<p>لحدث انتهى في وقت محدد في الماضي.</p>
+<p>كلمات دالة: yesterday, last week, in 2020, ago, when I was a child</p>
+<div class="ex">I <b>saw</b> him yesterday.</div>
+<h3>Present Perfect</h3>
+<p>التركيب: <b>have / has + V3</b>. لحدث وقته غير محدد، أو بدأ في الماضي وما زال مستمراً، أو له أثر الآن.</p>
+<p>كلمات دالة: ever, never, already, yet, just, since, for</p>
+<div class="ex">She <b>has lived</b> in Muscat since 2020. / <b>Have</b> you ever <b>been</b> to London?</div>
+<div class="tip"><b>since</b> + نقطة بداية (since 2020) و <b>for</b> + مدة (for three years). ولا نقول I have seen him yesterday، لأن yesterday وقت محدد يحتاج Past Simple.</div>`},
+
+{en:'Past Perfect', ar:'الماضي التام', body:`
+<p>التركيب: <b>had + V3</b>. نستخدمه للحدث الأسبق عندما يكون عندنا حدثان في الماضي.</p>
+<p>كلمات دالة: by the time, before, after, already, when</p>
+<div class="ex">By the time we arrived, the film <b>had started</b>.<br>(بداية الفيلم حصلت أولاً، ثم وصولنا)</div>
+<div class="tip">الحدث الأقدم = had + V3، والحدث الأحدث = Past Simple.</div>`},
+
+{en:'Future Forms', ar:'صيغ المستقبل', body:`
+<h3>will</h3><p>لقرار لحظي، أو وعد، أو توقع مبني على رأي.</p>
+<div class="ex">The phone is ringing. I <b>will answer</b> it.</div>
+<h3>be going to</h3><p>لخطة مقررة مسبقاً، أو توقع مبني على دليل نراه الآن.</p>
+<div class="ex">Look at those clouds! It <b>is going to</b> rain.</div>
+<h3>Present Continuous للمستقبل</h3><p>لموعد مرتب ومؤكد.</p>
+<div class="ex">I <b>am seeing</b> my dentist at 4 pm tomorrow.</div>
+<h3>Present Simple للجداول</h3><p>للمواعيد الرسمية الثابتة مثل الرحلات والقطارات.</p>
+<div class="ex">The plane <b>leaves</b> at 9 pm tomorrow.</div>
+<h3>Future Continuous: will be + V-ing</h3><p>لحدث مستمر في وقت محدد في المستقبل.</p>
+<div class="ex">This time tomorrow, I <b>will be lying</b> on the beach.</div>
+<h3>Future Perfect: will have + V3</h3><p>لحدث سينتهي قبل وقت محدد في المستقبل (غالباً مع by).</p>
+<div class="ex">By next June, I <b>will have finished</b> my degree.</div>
+<div class="tip">بعد when / as soon as / before / if نستخدم Present Simple حتى لو المعنى مستقبل: When I <b>get</b> home, I will call you.</div>`},
+
+{en:'Conditionals', ar:'الجمل الشرطية', body:`
+<h3>Zero Conditional: الحقائق</h3>
+<div class="ex">If + present, present<br>If you heat ice, it <b>melts</b>.</div>
+<h3>First Conditional: احتمال حقيقي في المستقبل</h3>
+<div class="ex">If + present, will + V<br>If it rains, I <b>will stay</b> home.</div>
+<h3>Second Conditional: افتراض غير واقعي في الحاضر</h3>
+<div class="ex">If + past, would + V<br>If I <b>had</b> more money, I would buy a car.</div>
+<h3>Third Conditional: ماضٍ لم يحدث</h3>
+<div class="ex">If + had + V3, would have + V3<br>If I <b>had studied</b> harder, I would have passed.</div>
+<div class="tip">لا نستخدم will بعد if مباشرة: نقول If it rains وليس If it will rain.</div>`},
+
+{en:'Passive Voice', ar:'المبني للمجهول', body:`
+<p>نستخدمه عندما يكون المهم هو الحدث أو الشيء، وليس الفاعل. التركيب: <b>be (بزمن الجملة) + V3</b></p>
+<ul>
+<li>المضارع: is / are + V3</li>
+<li>الماضي: was / were + V3</li>
+<li>المستقبل: will be + V3</li>
+<li>المضارع التام: has / have been + V3</li>
+</ul>
+<div class="ex">English <b>is spoken</b> in many countries.<br>The report <b>was written</b> by the manager.<br>The bridge <b>will be built</b> next year.</div>
+<div class="tip">نذكر الفاعل بعد <b>by</b> فقط إذا كان مهماً.</div>`},
+
+{en:'Subject-Verb Agreement', ar:'توافق الفاعل مع الفعل', body:`
+<ul>
+<li><b>each / every / everyone / nobody</b> + فعل مفرد</li>
+<li><b>neither ... nor / either ... or</b>: الفعل يتبع الاسم الأقرب له</li>
+<li><b>the number of</b> + فعل مفرد، و <b>a number of</b> + فعل جمع</li>
+<li>الأسماء غير المعدودة (information, news, advice, furniture) تأخذ فعلاً مفرداً</li>
+<li><b>one of</b> + جمع + فعل مفرد: One of my friends <b>is</b> a doctor.</li>
+<li><b>both ... and</b> + فعل جمع، و <b>the police</b> دائماً جمع</li>
+<li>أسماء المواد مثل mathematics, physics تأخذ فعلاً مفرداً</li>
+</ul>
+<div class="ex">Each of the students <b>has</b> a laptop.<br>Neither the manager nor the employees <b>were</b> ready.<br>The number of applicants <b>has</b> increased.</div>`},
+
+{en:'Articles: a / an / the', ar:'أدوات التعريف والتنكير', body:`
+<ul>
+<li><b>a</b> قبل صوت ساكن: a book, a university (تُنطق يو)</li>
+<li><b>an</b> قبل صوت متحرك: an apple, an hour, an honest man (الـ h صامتة)</li>
+<li><b>the</b> للشيء المحدد أو الفريد: the sun, the book I bought</li>
+<li><b>بدون أداة</b> للأشياء العامة والجمع والمفاهيم: I like music. Life is short.</li>
+</ul>
+<div class="tip">العبرة بالصوت وليس بالحرف المكتوب.</div>`},
+
+{en:'Prepositions of Time and Place', ar:'حروف الجر للزمن والمكان', body:`
+<h3>الزمن</h3>
+<ul>
+<li><b>in</b>: الشهور والسنوات والفصول وأجزاء اليوم (in May, in 1999, in the morning)</li>
+<li><b>on</b>: الأيام والتواريخ (on Monday, on 5 May)</li>
+<li><b>at</b>: الوقت المحدد (at 7 o'clock, at night, at noon)</li>
+</ul>
+<h3>المكان</h3>
+<ul>
+<li><b>in</b>: داخل مكان (in the room, in Oman)</li>
+<li><b>on</b>: على سطح (on the table, on the wall)</li>
+<li><b>at</b>: نقطة أو موقع محدد (at the station, at the door)</li>
+</ul>`},
+
+{en:'Comparatives and Superlatives', ar:'المقارنة والتفضيل', body:`
+<ul>
+<li>الصفات القصيرة: <b>-er / -est</b> (big → bigger → the biggest)</li>
+<li>الصفات المنتهية بـ y: easy → easier → the easiest</li>
+<li>الصفات الطويلة: <b>more / most</b> (more intelligent, the most intelligent)</li>
+<li>الشاذة: good → better → best، bad → worse → worst، far → further → furthest</li>
+</ul>
+<div class="ex">This exam was <b>easier than</b> the last one.<br>The more you practise, <b>the better</b> you become.</div>
+<div class="tip">لا نجمع الطريقتين: لا نقول more easier.</div>`},
+
+{en:'Relative Clauses', ar:'الضمائر الموصولة', body:`
+<ul>
+<li><b>who</b>: للأشخاص</li>
+<li><b>which</b>: للأشياء والحيوانات</li>
+<li><b>that</b>: للأشخاص والأشياء (في الجمل المحددة)</li>
+<li><b>whose</b>: للملكية</li>
+<li><b>where</b>: للمكان، و <b>when</b>: للزمن</li>
+</ul>
+<div class="ex">The woman <b>who</b> lives next door is a doctor.<br>The man <b>whose</b> car was stolen called the police.<br>This is the house <b>where</b> I grew up.</div>`},
+
+{en:'Gerunds and Infinitives', ar:'المصدر بـ ing والمصدر بـ to', body:`
+<h3>V-ing بعد:</h3>
+<p>enjoy, avoid, finish, mind, suggest, keep, look forward to، وبعد أي حرف جر</p>
+<div class="ex">I enjoy <b>reading</b>. / I look forward to <b>seeing</b> you.</div>
+<h3>to + V بعد:</h3>
+<p>decide, want, hope, plan, agree, need, refuse, promise</p>
+<div class="ex">She decided <b>to accept</b> the job.</div>
+<div class="tip">في look forward to تكون to حرف جر، لذلك يأتي بعدها V-ing.</div>`},
+
+{en:'Modal Verbs', ar:'الأفعال الناقصة', body:`
+<ul>
+<li><b>must</b>: إلزام أو استنتاج قوي</li>
+<li><b>mustn't</b>: ممنوع</li>
+<li><b>don't have to</b>: غير ضروري (اختياري)</li>
+<li><b>should</b>: نصيحة</li>
+<li><b>might / may</b>: احتمال</li>
+<li><b>can't</b>: استنتاج بأن الشيء مستحيل</li>
+</ul>
+<div class="ex">You <b>mustn't</b> smoke here.<br>You <b>don't have to</b> come if you are busy.<br>He <b>can't</b> be at home; I just saw him at the mall.</div>
+<div class="tip">بعد الفعل الناقص يأتي فعل مجرد بدون to وبدون s: she can swim.</div>`},
+
+{en:'Reported Speech', ar:'الكلام المنقول', body:`
+<p>عند نقل كلام شخص بعد said / told، نرجع الزمن خطوة للخلف:</p>
+<ul>
+<li>am / is → was</li>
+<li>present simple → past simple</li>
+<li>will → would، can → could</li>
+<li>past simple → past perfect</li>
+</ul>
+<div class="ex">She said, “I am tired.” → She said that she <b>was</b> tired.<br>“I will call you.” → He said he <b>would</b> call me.</div>
+<div class="tip">السؤال المنقول يأخذ ترتيب الجملة العادية: He asked where I <b>lived</b> (وليس where did I live).</div>`},
+
+{en:'Countable / Uncountable and Quantifiers', ar:'المعدود وغير المعدود وكلمات الكمية', body:`
+<ul>
+<li>مع المعدود: <b>many, few, a few, fewer</b></li>
+<li>مع غير المعدود: <b>much, little, a little, less</b></li>
+<li><b>some</b> في الإثبات والطلب، و <b>any</b> في النفي والسؤال</li>
+</ul>
+<p>أسماء غير معدودة شائعة: information, advice, money, furniture, news, equipment</p>
+<div class="ex">How <b>much</b> money? / How <b>many</b> people?<br>There are <b>fewer</b> people today.</div>`},
+
+{en:'Linking Words', ar:'أدوات الربط', body:`
+<ul>
+<li><b>although / even though</b> + جملة كاملة</li>
+<li><b>despite / in spite of</b> + اسم أو V-ing</li>
+<li><b>however</b>: تناقض بين جملتين، وتأتي بعدها فاصلة</li>
+<li><b>therefore</b>: نتيجة</li>
+<li><b>unless</b> = if not</li>
+<li><b>because</b> + جملة، و <b>because of</b> + اسم</li>
+</ul>
+<div class="ex"><b>Although</b> it was raining, they played.<br><b>Despite</b> the rain, they played.<br>He was ill. <b>However</b>, he went to work.</div>`},
+
+{en:'Vocabulary and Confusing Words', ar:'المفردات والكلمات المتشابهة', body:`
+<ul>
+<li><b>affect</b> فعل (يؤثر)، و <b>effect</b> اسم (تأثير)</li>
+<li><b>lend</b> تعطي شيئاً مؤقتاً، و <b>borrow</b> تأخذ شيئاً مؤقتاً</li>
+<li><b>raise</b> ترفع شيئاً (يحتاج مفعولاً)، و <b>rise</b> يرتفع بنفسه</li>
+<li><b>do</b>: do a favour, do homework، و <b>make</b>: make a decision, make a mistake</li>
+<li>أفعال مركبة: call off = يلغي، look after = يعتني، give up = يستسلم</li>
+</ul>
+<div class="tip">في أسئلة المرادفات: ضعي الخيار مكان الكلمة في الجملة، وشوفي إذا المعنى ما تغير.</div>`},
+
+{en:'Reading Comprehension', ar:'فهم المقروء', body:`
+<ol>
+<li>اقرئي السؤال أولاً، ثم ابحثي في النص عن الكلمات المفتاحية.</li>
+<li>انتبهي لكلمة <b>NOT</b> في السؤال.</li>
+<li>الجواب الصحيح غالباً يكون بكلمات مختلفة عن النص (إعادة صياغة).</li>
+<li>كلمات مثل however و on the other hand تدل على تناقض.</li>
+<li>لا تجيبي من معلوماتك العامة، الجواب لازم يكون من النص.</li>
+</ol>`}
+];
+
+// ================= نصوص القراءة (من تأليف المنصة) =================
+const PASSAGES = {
+A:`SunLeaf, a small company in Sohar, started producing solar panels in 2021. In its first year, it sold only 2,000 panels, mostly to local farms. However, after signing a contract with a large hotel chain in 2023, its sales tripled. The company now plans to open a training centre to teach young people how to install and maintain solar systems. Its manager says the biggest challenge is not technology but finding skilled workers.`,
+B:`Many people believe that working from home makes employees less productive. However, a survey of 500 office workers found the opposite: 60% said they completed more tasks at home than in the office. The main reasons they gave were fewer interruptions and no time lost travelling. On the other hand, 45% said they felt lonely and missed talking to colleagues. The researchers suggest that a mix of home and office work may be the best solution.`,
+C:`Last month, the city library in Nizwa started a new reading programme for children aged 7 to 12. Every Saturday, volunteers read stories aloud and then help the children write their own short stories. At the end of each month, the best story is printed in the library's newsletter. So far, more than 80 children have joined. The librarian says parents are happy because their children now spend less time on phones and more time with books.`,
+D:`Rashid owns a small date farm near Ibri. Every summer, he and his sons harvest the dates by hand because machines can damage the fruit. Last year the harvest was smaller than usual because of very hot weather and a lack of rain. To solve this problem, Rashid installed a new irrigation system that uses less water. He hopes that this year's harvest will be better.`,
+E:`Dear Ms Al-Harthy, Thank you for your application for the position of Junior Web Developer. We are pleased to invite you to an interview on Tuesday, 12 November, at 10 am at our office in Muscat. The interview will last about 45 minutes and will include a short technical task. Please bring a copy of your CV and your university certificate. If you cannot attend at this time, please contact us by Friday. Kind regards, HR Department`,
+F:`Sleep is essential for good health, yet many young adults do not get enough of it. Experts usually recommend seven to nine hours a night. Lack of sleep can make it harder to concentrate, remember information and control emotions. One common cause is using phones late at night, because the bright screen makes the brain think it is still daytime. A simple solution is to stop using screens at least one hour before going to bed.`
+};
+
+// ================= الأسئلة (30 لكل قاعدة) =================
+// الصيغة: رقم القاعدة|السؤال|الجواب الصحيح|خطأ|خطأ|خطأ|الشرح|النص
+const RAW = `0|The sun ___ in the east.|rises|is rising|rise|rised|حقيقة ثابتة: Present Simple مع s
+0|My brother ___ football every Friday.|plays|is playing|play|played|every Friday تدل على عادة
+0|Listen! Someone ___ at the door.|is knocking|knocks|knock|knocked|Listen! تعني أن الحدث يحصل الآن
+0|I ___ my homework at the moment.|am doing|do|does|did|at the moment تعني الآن
+0|She ___ coffee; she prefers tea.|doesn't drink|isn't drinking|don't drink|not drinks|تفضيل دائم في النفي مع she: doesn't + V
+0|___ you usually get up early?|Do|Are|Does|Is|سؤال عن عادة مع you: Do
+0|Look! The children ___ in the garden.|are playing|play|plays|played|Look! تعني الآن
+0|He ___ in a hospital; he is a nurse.|works|is working|work|working|وظيفة دائمة: Present Simple
+0|We ___ a new house this year, so we are living with my parents.|are building|build|builds|built|this year وضع مؤقت مستمر
+0|I ___ the answer to this question.|know|am knowing|knows|knowing|know فعل حالة لا يأتي بـ ing
+0|The train ___ at 6:30 every morning.|leaves|is leaving|leave|left|جدول ثابت يتكرر: Present Simple
+0|What ___ you doing now?|are|do|does|is|Present Continuous مع you: are + V-ing
+0|She ___ to music while she studies every evening.|listens|is listening|listen|listening|every evening عادة
+0|It ___ heavily right now, so take an umbrella.|is raining|rains|rain|rained|right now تعني الآن
+0|My father ___ a newspaper every morning.|reads|is reading|read|reading|every morning عادة
+0|They ___ TV at the moment.|are watching|watch|watches|watched|at the moment تعني الآن
+0|Cats ___ milk.|like|are liking|likes|liking|حقيقة عامة، والفاعل جمع، وlike فعل حالة
+0|This week I ___ the night shift.|am working|work|works|worked|this week وضع مؤقت
+0|He never ___ late for work.|arrives|is arriving|arrive|arriving|never تدل على عادة
+0|Why ___ she crying?|is|does|do|are|Present Continuous مع she: is + V-ing
+0|I ___ what you mean.|understand|am understanding|understands|understanding|understand فعل حالة
+0|Water ___ at 0°C.|freezes|is freezing|freeze|froze|حقيقة علمية
+0|Be quiet! The teacher ___.|is talking|talks|talk|talked|Be quiet! تعني أن الحدث الآن
+0|How often ___ he visit his grandmother?|does|is|do|has|سؤال عن عادة مع he: does
+0|She ___ a blue dress today.|is wearing|wears|wear|wore|today وضع مؤقت
+0|Most people in Oman ___ Arabic.|speak|are speaking|speaks|speaking|حقيقة عامة، والفاعل جمع
+0|Fuel prices ___ every month at the moment.|are rising|rise|rises|rose|at the moment: تغير يحصل في هذه الفترة
+0|I ___ this cake. It tastes great!|love|am loving|loves|loving|love فعل حالة
+0|My sister ___ English at a school in Sohar.|teaches|is teaching|teach|taught|عمل دائم
+0|Please turn off the TV. Nobody ___ it.|is watching|watches|watch|watched|الحدث الآن
+1|I ___ him last week.|met|have met|meet|have meet|last week وقت محدد: Past Simple
+1|She ___ in Sohar for five years, and she still lives there.|has lived|lived|lives|is live|for + مدة وما زالت مستمرة: Present Perfect
+1|We ___ to Salalah in 2019.|went|have gone|go|have been|in 2019 وقت محدد
+1|___ you ever ___ a camel?|Have / ridden|Did / ride|Have / rode|Did / ridden|ever مع Present Perfect: have + V3
+1|I have just ___ my lunch.|eaten|ate|eat|eating|just + have + V3
+1|They ___ the project yet.|haven't finished|don't finish|haven't finish|aren't finished|yet في النفي مع Present Perfect
+1|When ___ you graduate?|did|have|do|has|When تسأل عن وقت محدد: Past Simple
+1|She ___ her job two months ago.|left|has left|leaves|has leaved|ago: Past Simple
+1|I have known her ___ 2015.|since|for|ago|from|since + نقطة بداية
+1|He has worked here ___ ten years.|for|since|ago|during|for + مدة
+1|___ you see the match last night?|Did|Have|Do|Has|last night وقت محدد
+1|I ___ never ___ sushi.|have / eaten|did / eat|have / ate|was / eating|never + Present Perfect
+1|My parents ___ married in 1995.|got|have got|get|have gotten|in 1995 وقت محدد
+1|She has already ___ the email.|sent|send|sended|sending|already + have + V3
+1|How long ___ you known your best friend?|have|did|do|are|How long لحالة مستمرة: Present Perfect
+1|Yesterday I ___ three hours on this report.|spent|have spent|spend|spended|Yesterday وقت محدد
+1|The company ___ 50 new employees since January.|has hired|hired|hires|hire|since January: Present Perfect
+1|I ___ to Dubai twice this year.|have been|went|go|was|this year لم تنتهِ + عدد المرات
+1|Shakespeare ___ many famous plays.|wrote|has written|writes|have written|شخص توفي، والفترة انتهت: Past Simple
+1|We ___ dinner at 8 pm yesterday.|had|have had|have|has|وقت محدد في الماضي
+1|This is the first time I ___ snow.|have seen|saw|see|am seeing|This is the first time + Present Perfect
+1|She ___ her homework an hour ago.|finished|has finished|finishes|finish|ago: Past Simple
+1|Have you ___ the new manager yet?|met|meet|meeting|meted|have + V3
+1|It ___ a lot last winter.|rained|has rained|rains|rain|last winter وقت منتهٍ
+1|I ___ here since I was a child.|have lived|lived|live|am living|since + بداية وما زال مستمراً
+1|They ___ each other for a long time, and they are still friends.|have known|knew|know|are knowing|for + مدة مستمرة حتى الآن
+1|What time ___ the meeting start yesterday?|did|has|does|have|yesterday وقت محدد
+1|He ___ just ___ home.|has / arrived|did / arrive|is / arrived|was / arrive|just + Present Perfect
+1|We ___ any rain this month.|haven't had|don't have|hadn't|aren't having|this month لم ينتهِ: Present Perfect
+1|In 2010, my family ___ to Muscat.|moved|has moved|moves|have moved|In 2010 وقت محدد
+2|When we arrived, the bus ___ already ___.|had / left|has / left|was / leaving|did / leave|الحافلة غادرت قبل وصولنا: had + V3
+2|She ___ the book before she watched the film.|had read|has read|reads|was reading|القراءة حصلت أولاً
+2|By the time the police came, the thief ___.|had escaped|has escaped|escapes|was escape|by the time + Past Perfect للحدث الأسبق
+2|I didn't recognise him because he ___ a lot.|had changed|has changed|changes|changing|التغيير حصل قبل لقائي به
+2|After they ___ dinner, they went for a walk.|had eaten|have eaten|eat|were eaten|الأكل أولاً ثم المشي
+2|He was hungry because he ___ breakfast.|hadn't eaten|didn't ate|hasn't eaten|doesn't eat|عدم الأكل حصل قبل الجوع
+2|___ you ever visited Oman before you moved there?|Had|Have|Did|Were|الزيارة قبل الانتقال: Past Perfect
+2|The film ___ when I turned on the TV.|had already started|has already started|already starts|already start|بداية الفيلم كانت أولاً
+2|She told me she ___ the job.|had accepted|has accepted|accepts|accepting|القبول حصل قبل إخبارها
+2|We ___ for two hours when the rain stopped.|had walked|have walked|walk|walks|المشي حصل قبل توقف المطر
+2|I realised that I ___ my phone at home.|had left|have left|leave|leaving|نسيان الهاتف حصل قبل الإدراك
+2|Before the meeting started, the manager ___ the report.|had prepared|has prepared|prepares|preparing|التحضير قبل الاجتماع
+2|They were tired because they ___ all night.|had travelled|have travelled|travel|travels|السفر قبل التعب
+2|By 2020, she ___ three books.|had written|has written|writes|is writing|By + وقت في الماضي: Past Perfect
+2|When I got to the shop, it ___.|had closed|has closed|closes|closing|الإغلاق قبل وصولي
+2|He ___ never ___ a plane before that trip.|had / taken|has / taken|did / take|was / taking|قبل تلك الرحلة: Past Perfect
+2|The students ___ the exam before the bell rang.|had finished|have finished|finish|finishing|الانتهاء قبل الجرس
+2|I couldn't pay because I ___ my wallet.|had lost|have lost|lose|loses|الضياع قبل الدفع
+2|She thanked me for the help I ___ her.|had given|have given|give|gives|المساعدة قبل الشكر
+2|Once he ___ his work, he went home.|had finished|has finished|finishes|finishing|إنهاء العمل أولاً
+2|They ___ the house before they moved in.|had painted|have painted|paint|painting|الدهان قبل الانتقال
+2|The garden was wet because it ___.|had rained|has rained|rains|raining|المطر قبل أن نرى الحديقة مبللة
+2|He asked whether I ___ the news.|had heard|have heard|hear|hearing|سماع الخبر قبل سؤاله
+2|Until last year, I ___ never ___ abroad.|had / been|have / been|did / go|was / going|حتى وقت في الماضي: Past Perfect
+2|When she arrived at the party, most guests ___.|had left|have left|leave|leaving|المغادرة قبل وصولها
+2|The teacher was angry because we ___ our homework.|hadn't done|haven't done|don't do|didn't did|عدم الواجب قبل غضب المعلم
+2|As soon as the guests ___, we started eating.|had arrived|have arrived|arrive|arriving|الوصول أولاً ثم الأكل
+2|I knew the answer because I ___ the lesson the night before.|had studied|have studied|study|studies|الدراسة قبل المعرفة
+2|It was the first time she ___ the sea.|had seen|has seen|sees|seeing|It was the first time + Past Perfect
+2|Which sentence is correct?|I had finished my work before he called.|I have finished my work before he called.|I finished my work before he has called.|I had finish my work before he called.|had + V3 للحدث الأسبق
+3|I'm thirsty. — I ___ get you some water.|will|am going to|am getting|get|قرار لحظي: will
+3|Look at that car! It ___ crash!|is going to|will|crashes|crash|توقع مبني على دليل نراه: going to
+3|We ___ to Muscat next weekend; we have already booked the hotel.|are going|will going|go|went|خطة مرتبة: Present Continuous للمستقبل
+3|I think it ___ sunny tomorrow.|will be|is being|is|was|I think + will للتوقع بالرأي
+3|She ___ study medicine next year. She has already applied.|is going to|will to|goes|went|خطة مقررة مسبقاً: going to
+3|Don't worry, I ___ tell anyone your secret.|won't|am not going|don't|didn't|وعد: will / won't
+3|The plane ___ at 9 pm tomorrow, according to the timetable.|leaves|leave|will leaving|left|الجداول الرسمية: Present Simple
+3|Perhaps I ___ you later.|will call|am calling|call|called|perhaps + will للاحتمال
+3|A: I've lost my pen. B: I ___ lend you mine.|will|am going to|lend|am lending|عرض لحظي: will
+3|He ___ his grandparents this evening; they are expecting him.|is visiting|visits|visit|visited|موعد مرتب: Present Continuous
+3|By next June, I ___ my degree.|will have finished|will finish|finish|am finishing|By + وقت في المستقبل: will have + V3
+3|This time tomorrow, I ___ on the beach.|will be lying|will lie|lie|am lie|حدث مستمر في وقت محدد بالمستقبل: will be + V-ing
+3|___ you help me with this box, please?|Will|Are|Do you going|Did|طلب: Will you ... ?
+3|They ___ married in June. Everything is arranged.|are getting|get|will getting|got|ترتيب مؤكد: Present Continuous
+3|I'm sure she ___ the exam. She studied very hard.|will pass|passes|is passing|passed|I'm sure + will
+3|What ___ you ___ do after graduation? Have you decided?|are / going to|will / be|do / going|did / going|سؤال عن خطة: going to
+3|The meeting ___ at 10 am tomorrow according to the schedule.|starts|start|starting|started|جدول: Present Simple
+3|When I ___ home, I will call you.|get|will get|got|getting|بعد when (للمستقبل) نستخدم Present Simple
+3|If it ___ tomorrow, we will stay at home.|rains|will rain|rained|raining|لا نستخدم will بعد if
+3|I ___ you as soon as I arrive.|will text|text|am texting|texted|الجملة الرئيسية: will
+3|She is pregnant. She ___ a baby.|is going to have|will having|has|had|دليل واضح: going to
+3|Next year, I ___ 25 years old.|will be|am going|be|was|حقيقة في المستقبل: will
+3|The shop ___ open until 10 pm tonight.|will be|is going|be|been|توقع في المستقبل: will be
+3|We ___ dinner with our friends on Friday. We booked a table.|are having|have|will having|had|ترتيب مؤكد
+3|Don't call me at 8; I ___ my favourite programme then.|will be watching|will watch|watch|watched|حدث مستمر وقت الاتصال: will be + V-ing
+3|By the end of this year, they ___ the new road.|will have built|will build|build|built|By + وقت مستقبلي: will have + V3
+3|I don't think he ___ come to the party.|will|is|does|did|I don't think + will
+3|Oh no! I forgot my wallet. — Don't worry, I ___ pay.|will|am going to|pay|paid|قرار لحظي: will
+3|Which sentence is correct?|I will call you when I get home.|I will call you when I will get home.|I call you when I will get home.|I calling you when I get home.|بعد when نستخدم Present Simple
+3|They ___ a new branch in Sohar next month; the plans are ready.|are going to open|will opening|opens|opened|خطة جاهزة: going to
+4|If you mix red and white, you ___ pink.|get|got|would got|had got|حقيقة: Zero Conditional
+4|If it rains tomorrow, we ___ the trip.|will cancel|would cancel|cancelled|had cancelled|احتمال حقيقي: First Conditional
+4|If I ___ you, I would accept the offer.|were|am|will be|had been|If I were you: Second Conditional
+4|If she had left earlier, she ___ the bus.|would have caught|would catch|will catch|caught|Third Conditional: would have + V3
+4|If you ___ hard, you will pass.|study|will study|studied|had studied|First Conditional: If + present
+4|If I won the lottery, I ___ a big house.|would buy|will buy|buy|had bought|Second Conditional: would + V
+4|If we ___ the map, we wouldn't have got lost.|had taken|took|take|would take|Third Conditional: If + had + V3
+4|Plants die if they ___ water.|don't get|won't get|didn't get|wouldn't get|حقيقة: Zero Conditional
+4|Unless you hurry, you ___ late.|will be|would be|are|were|unless = if not، First Conditional
+4|If he ___ more time, he would learn French.|had|has|will have|would have|Second Conditional: If + past
+4|If I had known you were in hospital, I ___ you.|would have visited|would visit|will visit|visited|Third Conditional
+4|What would you do if you ___ a snake?|saw|see|will see|had seen|Second Conditional
+4|If you heat water to 100°C, it ___.|boils|would boil|boiled|will have boiled|حقيقة علمية
+4|If she ___ the email, she will reply.|receives|will receive|received|had received|First Conditional
+4|If they had invited me, I ___ to the wedding.|would have gone|would go|will go|went|Third Conditional
+4|I would travel more if I ___ so busy.|weren't|am not|won't be|hadn't been|Second Conditional
+4|If you press this button, the machine ___.|starts|started|would started|had started|Zero Conditional: نتيجة ثابتة
+4|If I ___ my phone with me, I could have called you.|had had|have|will have|has|Third Conditional: If + had + V3
+4|You can go out if you ___ your homework.|finish|will finish|finished|would finish|If + present
+4|If it ___ so cold, we would go swimming.|weren't|isn't|won't be|hadn't been|Second Conditional
+4|If he had studied, he ___ the exam.|wouldn't have failed|won't fail|doesn't fail|wouldn't fail|Third Conditional
+4|If you ___ me, I will help you.|call|will call|called|would call|First Conditional
+4|She would be happier if she ___ a better job.|had|has|will have|would have|Second Conditional
+4|If I ___ about the problem, I would have helped.|had known|knew|know|would know|Third Conditional
+4|Ice melts if you ___ it in the sun.|leave|will leave|left|would leave|Zero Conditional
+4|If we leave now, we ___ the beginning of the film.|won't miss|wouldn't miss|didn't miss|hadn't missed|First Conditional
+4|I ___ him if I saw him.|would tell|will tell|told|had told|Second Conditional
+4|If they ___ the instructions, they wouldn't have made mistakes.|had read|reads|would read|have read|Third Conditional
+4|Which sentence is correct?|If I see her, I will tell her.|If I will see her, I will tell her.|If I saw her, I will tell her.|If I see her, I would told her.|لا will بعد if
+4|“If I had money, I would travel.” This sentence is a:|Second conditional|First conditional|Zero conditional|Third conditional|If + past, would + V
+5|This house ___ in 1990.|was built|built|is building|has build|مجهول في الماضي: was + V3
+5|Arabic ___ in many countries.|is spoken|speaks|is speaking|spoken|مجهول في المضارع: is + V3
+5|The letters ___ every morning.|are delivered|deliver|are delivering|delivered|مجهول جمع: are + V3
+5|The thief ___ by the police yesterday.|was caught|caught|is catching|has caught|was + V3
+5|The results ___ next week.|will be announced|will announce|announce|are announcing|مستقبل مجهول: will be + V3
+5|The windows ___ already ___.|have / been cleaned|have / cleaned|are / cleaning|was / clean|مضارع تام مجهول: have been + V3
+5|Rice ___ by farmers in many Asian countries.|is grown|grows|is growing|grown|is + V3 مع by
+5|The new hospital ___ by the minister last month.|was opened|opened|is opened|has opened|was + V3
+5|English ___ at this school.|is taught|teaches|is teaching|taught|is + V3
+5|My car ___ at the moment.|is being repaired|is repairing|repairs|repaired|مستمر مجهول: is being + V3
+5|The email ___ to all staff yesterday.|was sent|sent|is sending|has sent|was + V3
+5|The rooms ___ every day.|are cleaned|clean|are cleaning|cleaned|are + V3
+5|The book ___ into 20 languages so far.|has been translated|has translated|translated|is translating|so far: has been + V3
+5|The match ___ because of the rain.|was cancelled|cancelled|is cancelling|has cancel|was + V3
+5|Mistakes ___ by everyone.|are made|make|are making|made|are + V3
+5|The project must ___ by Friday.|be finished|finish|finished|be finishing|modal + be + V3
+5|Passports ___ at the airport.|are checked|check|are checking|checked|are + V3
+5|The bridge ___ at the moment.|is being built|is building|builds|built|is being + V3
+5|The winner ___ tomorrow.|will be chosen|will choose|chooses|is choosing|will be + V3
+5|This song ___ by millions of people.|has been heard|has heard|hears|is hearing|has been + V3
+5|The cake ___ by my mother.|was made|made|is making|has make|was + V3
+5|Smoking ___ in this building.|is not allowed|does not allow|is not allowing|not allowed|is not + V3
+5|The documents ___ before the meeting.|had been signed|had signed|signed|were signing|ماضي تام مجهول: had been + V3
+5|The passive of “They clean the office every day” is:|The office is cleaned every day.|The office cleans every day.|The office was cleaned every day.|The office is cleaning every day.|نفس الزمن (مضارع): is + V3
+5|The passive of “Someone stole my bag” is:|My bag was stolen.|My bag stole.|My bag is stealing.|My bag has stole.|نفس الزمن (ماضي): was + V3
+5|The museum ___ by thousands of tourists every year.|is visited|visits|is visiting|visited|is + V3
+5|The new rules ___ next month.|will be introduced|will introduce|introduce|are introducing|will be + V3
+5|The car ___ yet.|hasn't been washed|hasn't washed|didn't wash|isn't washing|yet: hasn't been + V3
+5|Oman ___ for its beautiful mountains.|is known|knows|is knowing|known|be known for
+5|The passive of “They will finish the work tomorrow” is:|The work will be finished tomorrow.|The work will finish tomorrow.|The work is finished tomorrow.|The work will be finishing tomorrow.|will be + V3
+6|Everyone ___ here.|is|are|were|have been|everyone + فعل مفرد
+6|The news ___ good today.|is|are|were|have been|news اسم غير معدود: فعل مفرد
+6|Either the teacher or the students ___ the room.|clean|cleans|is cleaning|has cleaned|either ... or: الفعل يتبع الأقرب (students جمع)
+6|Either the students or the teacher ___ the room.|cleans|clean|are cleaning|have cleaned|الأقرب teacher مفرد
+6|A number of people ___ complained.|have|has|is|was|a number of + فعل جمع
+6|The number of cars ___ growing.|is|are|were|have|the number of + فعل مفرد
+6|Each child ___ a gift.|receives|receive|are receiving|have received|each + فعل مفرد
+6|Nobody ___ the answer.|knows|know|are knowing|have known|nobody + فعل مفرد
+6|The information you gave me ___ very useful.|was|were|are|have been|information غير معدود: فعل مفرد
+6|Mathematics ___ my favourite subject.|is|are|were|have been|أسماء المواد المنتهية بـ s تأخذ فعلاً مفرداً
+6|The team members ___ happy with the result.|are|is|was|has been|members جمع
+6|One of my friends ___ a doctor.|is|are|were|have been|one of + جمع + فعل مفرد
+6|The books on the table ___ mine.|are|is|was|has been|الفاعل books جمع
+6|Every student and teacher ___ invited.|was|were|are|have been|every + فعل مفرد
+6|Neither of the answers ___ correct.|is|are|were|have been|neither of + فعل مفرد (في الإنجليزية الرسمية)
+6|The furniture in this room ___ new.|is|are|were|have been|furniture غير معدود
+6|Ten kilometres ___ a long distance to walk.|is|are|were|have been|المسافة كوحدة واحدة: فعل مفرد
+6|There ___ many people at the meeting.|were|was|is|has been|people جمع
+6|There ___ some water in the bottle.|is|are|were|have been|water غير معدود
+6|The manager, together with his assistants, ___ coming.|is|are|were|have been|الفاعل الأساسي manager مفرد
+6|Somebody ___ left the door open.|has|have|are|were|somebody + فعل مفرد
+6|The police ___ investigating the case.|are|is|was|has been|police دائماً جمع
+6|My advice ___ to study every day.|is|are|were|have been|advice غير معدود
+6|Both my brother and my sister ___ engineers.|are|is|was|has been|both ... and: فعل جمع
+6|The students in my class ___ very friendly.|are|is|was|has been|الفاعل students جمع
+6|Not only the students but also the teacher ___ excited.|was|were|are|have been|not only ... but also: الفعل يتبع الأقرب
+6|Physics ___ difficult for many students.|is|are|were|have been|اسم مادة: فعل مفرد
+6|Each of the rooms ___ a window.|has|have|are having|were having|each of + فعل مفرد
+6|Which sentence is correct?|The list of names is on the desk.|The list of names are on the desk.|The list of names were on the desk.|The list of names have been on the desk.|الفاعل list مفرد
+6|Which sentence is correct?|Everybody likes her.|Everybody like her.|Everybody are liking her.|Everybody have liked her.|everybody + فعل مفرد
+7|She is ___ engineer.|an|a|the|(no article)|engineer تبدأ بصوت متحرك: an
+7|He waited for ___ hour.|an|a|the|(no article)|h صامتة في hour: an
+7|He wants to become ___ university teacher.|a|an|the|(no article)|university تُنطق يو (صوت ساكن): a
+7|___ moon goes around the Earth.|The|A|An|(no article)|القمر شيء فريد: the
+7|In general, I like ___ coffee.|(no article)|a|an|the|الأشياء العامة غير المعدودة بدون أداة
+7|Can you close ___ door, please?|the|a|an|(no article)|باب محدد يعرفه الطرفان: the
+7|He plays ___ football every day.|(no article)|a|an|the|الرياضات بدون أداة
+7|She plays ___ piano very well.|the|a|an|(no article)|الآلات الموسيقية مع play: the
+7|___ Nile is the longest river in Africa.|The|A|An|(no article)|الأنهار تأخذ the
+7|I go to work by ___ bus.|(no article)|a|the|an|by + وسيلة نقل بدون أداة
+7|This is ___ best day of my life.|the|a|an|(no article)|التفضيل يأخذ the
+7|What ___ beautiful day!|a|an|the|(no article)|What + a + صفة + اسم مفرد معدود
+7|___ honesty is important.|(no article)|The|A|An|المفاهيم المجردة بشكل عام بدون أداة
+7|She has ___ MBA.|an|a|the|(no article)|MBA تُنطق إم (صوت متحرك): an
+7|I bought a book and a pen. ___ book was expensive.|The|A|An|(no article)|الشيء المذكور سابقاً: the
+7|___ United Arab Emirates is near Oman.|The|A|An|(no article)|الدول التي فيها United أو جمع تأخذ the
+7|He is ___ European citizen.|a|an|the|(no article)|European تُنطق يو: a
+7|In general, ___ dogs are loyal animals.|(no article)|The|A|An|الجمع العام بدون أداة
+7|We had ___ dinner at 8.|(no article)|a|an|the|الوجبات بشكل عام بدون أداة
+7|She is ___ only person who knows.|the|a|an|(no article)|the only
+7|I met ___ old friend yesterday.|an|a|the|(no article)|old تبدأ بصوت متحرك: an
+7|___ Mount Everest is very high.|(no article)|The|A|An|أسماء الجبال المفردة بدون أداة
+7|He works as ___ taxi driver.|a|an|the|(no article)|المهنة: a / an
+7|Please pass me ___ salt.|the|a|an|(no article)|شيء محدد على الطاولة: the
+7|___ water is necessary for life.|(no article)|The|A|An|غير معدود بشكل عام: بدون أداة
+7|It takes ___ hour and a half.|an|a|the|(no article)|hour: an
+7|I'll meet you at ___ airport.|the|a|an|(no article)|المطار المعروف: the
+7|She speaks ___ English fluently.|(no article)|the|an|a|اللغات بدون أداة
+7|___ Indian Ocean is near Oman.|The|A|An|(no article)|المحيطات تأخذ the
+7|This is ___ unusual question.|an|a|the|(no article)|unusual صوت متحرك: an
+8|My birthday is ___ May.|in|on|at|by|الشهور: in
+8|The shop opens ___ 9 am.|at|in|on|by|الوقت المحدد: at
+8|We'll meet ___ Friday.|on|in|at|by|الأيام: on
+8|I was born ___ 15 June.|on|in|at|by|التواريخ: on
+8|She studies ___ the morning.|in|on|at|by|in the morning
+8|I sleep ___ night.|at|in|on|by|at night
+8|He lives ___ Oman.|in|on|at|by|الدول والمدن: in
+8|The picture is ___ the wall.|on|in|at|by|على سطح: on
+8|Wait for me ___ the bus stop.|at|in|on|of|نقطة محددة: at
+8|The keys are ___ my bag.|in|on|at|of|داخل: in
+8|We have a holiday ___ summer.|in|on|at|by|الفصول: in
+8|The meeting is ___ noon.|at|in|on|by|at noon
+8|He has worked here ___ 2018.|since|for|from|at|since + نقطة بداية
+8|Please send the report ___ Friday at the latest.|by|until|in|since|by = في موعد أقصاه
+8|She is good ___ maths.|at|in|on|with|good at
+8|I'm interested ___ technology.|in|on|at|about|interested in
+8|He is afraid ___ dogs.|of|from|with|at|afraid of
+8|It depends ___ the weather.|on|of|from|at|depend on
+8|She arrived ___ the airport.|at|to|in|on|arrive at + مكان محدد
+8|I'll see you ___ two weeks (two weeks from now).|in|on|at|since|in + مدة = بعد
+8|The cat is ___ the table, not on it.|under|on|in|at|under = تحت
+8|The bank is ___ the hospital and the school.|between|among|in|at|between لشيئين
+8|We stayed at home ___ the storm.|during|while|since|for|during + اسم
+8|She lives ___ the second floor.|on|in|at|by|الطوابق: on
+8|He got ___ the bus at the last stop.|off|out|of|down|get off the bus
+8|I'm looking forward ___ the holiday.|to|for|at|on|look forward to
+8|The children are ___ school now.|at|on|to|by|at school
+8|She has been sick ___ three days.|for|since|from|during|for + مدة
+8|He apologised ___ being late.|for|of|on|with|apologise for
+8|The book was written ___ a famous author.|by|from|with|of|by بعد المبني للمجهول
+9|My house is ___ than yours.|bigger|biggest|more big|big|صفة قصيرة: -er + than
+9|This is the ___ book I have ever read.|best|better|good|most good|good → better → best
+9|Today is ___ than yesterday.|hotter|hottest|more hot|hot|hot → hotter (نضاعف الحرف الأخير)
+9|She is ___ than her sister.|more beautiful|beautifuller|most beautiful|beautiful|صفة طويلة: more + than
+9|Mount Everest is the ___ mountain in the world.|highest|higher|most high|high|التفضيل: the + -est
+9|This test is ___ difficult than the last one.|more|most|the most|much|صفة طويلة: more ... than
+9|He is the ___ person in our team.|tallest|taller|most tall|tall|التفضيل: the tallest
+9|My English is getting ___ and ___.|better / better|good / good|best / best|more good / more good|مقارن مكرر للتدرج: better and better
+9|This car is ___ expensive as that one.|as|so|than|more|as + صفة + as للتساوي
+9|Muscat is ___ from Sohar than Barka is.|farther|farthest|more far|far|far → farther / further
+9|My handwriting is ___ than yours; I can't even read it.|worse|worst|badder|more bad|bad → worse
+9|Which is the ___ city in Oman?|largest|larger|most large|large|التفضيل: the largest
+9|The weather today is not as ___ as yesterday.|cold|colder|coldest|more cold|as + الصفة الأصلية + as
+9|The ___ you start, the sooner you finish.|earlier|earliest|more early|early|the + مقارن ..., the + مقارن
+9|She runs ___ than me.|faster|fastest|more fast|fast|fast → faster
+9|This is ___ interesting film of the year.|the most|more|most|the more|التفضيل لصفة طويلة: the most
+9|He is ___ older than me; he is 20 years older.|much|very|more|most|much + مقارن للتأكيد
+9|Tea is ___ popular than coffee in some countries.|more|most|much|the most|more + صفة طويلة + than
+9|That was the ___ exam I have ever taken.|easiest|easier|most easy|easy|easy → the easiest
+9|My bag is ___ heavy as yours.|as|than|more|so|as ... as
+9|Gold is ___ than silver.|more expensive|expensiver|most expensive|expensive|صفة طويلة: more ... than
+9|This road is ___ dangerous of all.|the most|more|most|the more|of all = تفضيل: the most
+9|He works ___ than anyone else.|harder|hardest|more hard|hard|hard → harder
+9|Your answer is ___ than mine.|better|best|gooder|more good|good → better
+9|She is one of the ___ students in the school.|cleverest|cleverer|more clever|clever|one of the + تفضيل
+9|The more you read, the ___ you learn.|more|most|much|many|the more ..., the more ...
+9|This box is twice ___ heavy as that one.|as|more|than|so|twice as ... as
+9|Which sentence is correct?|She is taller than me.|She is more tall than me.|She is tallest than me.|She is taller as me.|taller than
+9|Which sentence is correct?|This is the most important lesson.|This is the importantest lesson.|This is the more important lesson of all.|This is most importanter lesson.|صفة طويلة: the most
+9|It is ___ to walk than to drive in the old town.|easier|easiest|more easy|easy|easy → easier
+10|The boy ___ won the prize is my cousin.|who|which|whose|where|للأشخاص: who
+10|The phone ___ I bought is very fast.|which|who|whose|where|للأشياء: which
+10|That's the restaurant ___ we had dinner.|where|which|who|whose|للمكان: where
+10|The girl ___ bag was stolen is crying.|whose|who|which|where|للملكية: whose
+10|I remember the day ___ we first met.|when|where|which|who|للزمن: when
+10|The man ___ is talking to Ali is my teacher.|who|which|whose|where|للأشخاص: who
+10|This is the book ___ changed my life.|that|who|whose|where|للأشياء: that / which
+10|Do you know anyone ___ speaks French?|who|which|whose|where|للأشخاص: who
+10|The city ___ I was born is small.|where|which|who|when|للمكان: where
+10|The company ___ she works for is in Muscat.|that|who|whose|where|works for + الشيء: that
+10|My friend, ___ father is a pilot, travels a lot.|whose|who|which|that|للملكية: whose
+10|The students ___ passed the test will get a certificate.|who|which|whose|where|للأشخاص: who
+10|This is the laptop ___ screen is broken.|whose|which|who|where|ملكية لشيء: whose
+10|Oman, ___ is in the Arabian Peninsula, has beautiful beaches.|which|that|who|where|بين فاصلتين لا نستخدم that
+10|The year ___ I graduated was 2026.|when|where|which|who|للزمن: when
+10|The woman ___ I met yesterday is a lawyer.|whom|whose|which|where|للشخص المفعول به: whom / who
+10|The house ___ roof is red belongs to my uncle.|whose|which|who|where|للملكية: whose
+10|He showed me the photos ___ he took in Salalah.|that|who|whose|where|للأشياء: that
+10|The hotel ___ we stayed was very clean.|where|which|who|whose|للمكان: where
+10|People ___ exercise regularly are healthier.|who|which|whose|where|للأشخاص: who
+10|This is the reason ___ I called you.|why|where|which|who|the reason why
+10|The dog ___ lives next door barks at night.|which|who|whose|where|للحيوان: which
+10|I have a friend ___ brother plays for the national team.|whose|who|which|that|للملكية: whose
+10|The test ___ we took yesterday was easy.|that|who|whose|where|للأشياء: that
+10|She is the teacher ___ helped me the most.|who|which|whose|where|للأشخاص: who
+10|The building ___ we work is very old.|where|which|who|whose|للمكان: where
+10|Muscat, ___ is the capital of Oman, is a beautiful city.|which|that|who|where|بين فاصلتين: which
+10|The day ___ the exam starts is Sunday.|when|where|who|whose|للزمن: when
+10|Which sentence is correct?|The man who called you is here.|The man which called you is here.|The man whose called you is here.|The man where called you is here.|للأشخاص: who
+10|Which sentence is correct?|This is the car that I want.|This is the car who I want.|This is the car whose I want.|This is the car where I want.|للأشياء: that
+11|She avoids ___ fast food.|eating|to eat|eat|eats|avoid + V-ing
+11|They agreed ___ the contract.|to sign|signing|sign|signed|agree + to + V
+11|I finished ___ the report at midnight.|writing|to write|write|wrote|finish + V-ing
+11|He wants ___ a doctor.|to become|becoming|become|became|want + to + V
+11|Would you mind ___ the window?|opening|to open|open|opened|mind + V-ing
+11|We hope ___ you soon.|to see|seeing|see|saw|hope + to + V
+11|She suggested ___ to the beach.|going|to go|go|went|suggest + V-ing
+11|I need ___ more water.|to drink|drinking|drink|drank|need + to + V
+11|He is good at ___ problems.|solving|to solve|solve|solved|بعد حرف الجر: V-ing
+11|They refused ___ the question.|to answer|answering|answer|answered|refuse + to + V
+11|Thank you for ___ me.|helping|to help|help|helped|بعد حرف الجر for: V-ing
+11|She keeps ___ the same mistake.|making|to make|make|made|keep + V-ing
+11|I'm planning ___ abroad next year.|to study|studying|study|studied|plan + to + V
+11|___ is good for your health.|Swimming|Swim|Swam|Swims|الفعل كفاعل في بداية الجملة: V-ing
+11|He promised ___ on time.|to arrive|arriving|arrive|arrived|promise + to + V
+11|I can't stand ___ in long queues.|waiting|to waiting|wait|waited|can't stand + V-ing
+11|She learned ___ when she was five.|to swim|swimming|swim|swam|learn + to + V
+11|Instead of ___ TV, read a book.|watching|to watch|watch|watched|بعد حرف الجر of: V-ing
+11|It's important ___ enough sleep.|to get|getting|get|got|It's + صفة + to + V
+11|He gave up ___ last year.|smoking|to smoke|smoke|smoked|give up + V-ing
+11|They decided not ___ the party.|to attend|attending|attend|attended|decide not to + V
+11|I'm used to ___ up early.|getting|get|got|gets|be used to + V-ing (to حرف جر)
+11|She is afraid of ___ alone.|being|to be|be|been|بعد حرف الجر: V-ing
+11|Do you enjoy ___ to music?|listening|to listen|listen|listened|enjoy + V-ing
+11|We expect ___ the results tomorrow.|to receive|receiving|receive|received|expect + to + V
+11|He practised ___ English every day.|speaking|to speak|speak|spoke|practise + V-ing
+11|I'm too tired ___ any more.|to walk|walking|walk|walked|too + صفة + to + V
+11|She managed ___ the problem.|to solve|solving|solve|solved|manage + to + V
+11|Which sentence is correct?|I look forward to hearing from you.|I look forward to hear from you.|I look forward hearing from you.|I look forward to heard from you.|look forward to + V-ing
+11|Which sentence is correct?|He decided to leave early.|He decided leaving early.|He decided leave early.|He decided to leaving early.|decide + to + V
+12|You ___ wear a seatbelt. It's the law.|must|might|could|needn't|إلزام: must
+12|You ___ bring food; we have plenty.|don't have to|mustn't|can't|shouldn't to|غير ضروري: don't have to
+12|Students ___ use phones during the exam.|mustn't|don't have to|needn't|might|ممنوع: mustn't
+12|You look tired. You ___ go to bed.|should|must not|can't|needn't|نصيحة: should
+12|She ___ speak three languages.|can|must to|should to|cans|قدرة: can + V
+12|It ___ rain later; take an umbrella just in case.|might|must|can't|should to|احتمال: might
+12|He's been working all day. He ___ be exhausted.|must|can't|mustn't|needn't|استنتاج قوي: must
+12|That ___ be Sara; she is in London now.|can't|must|should|might|استنتاج بالاستحالة: can't
+12|___ I use your phone, please?|May|Must|Should|Need|طلب إذن: May I
+12|You ___ see a doctor about that cough.|should|mustn't|can't|don't have to|نصيحة: should
+12|When I was young, I ___ swim very well.|could|can|must|should|قدرة في الماضي: could
+12|We ___ hurry; the train leaves in five minutes.|have to|don't have to|mustn't|might not|ضرورة: have to
+12|You ___ park here. It's a no-parking area.|can't|don't have to|needn't|should|غير مسموح: can't
+12|She is never late, but she isn't here. She ___ have forgotten.|must|can|should|needs|استنتاج قوي عن الماضي: must have + V3
+12|He ___ have taken your book; he wasn't here today.|can't|must|should|would|استحالة في الماضي: can't have + V3
+12|You ___ to finish this today; tomorrow is fine.|don't need|mustn't|can't|shouldn't|غير ضروري: don't need to
+12|___ you help me carry these boxes?|Could|Must|Should|Need|طلب مهذب: Could you
+12|It's late. We ___ go home now.|should|can't|mustn't|needn't|نصيحة: should
+12|I ___ go to work tomorrow; it's a holiday.|don't have to|mustn't|can't|shouldn't to|غير ضروري: don't have to
+12|You ___ touch that wire! It's dangerous.|mustn't|don't have to|needn't|might|ممنوع: mustn't
+12|She ___ be at home; the lights are on.|must|can't|mustn't|needn't|استنتاج قوي: must
+12|I'm not sure, but he ___ be in his office.|might|must|can't|has to|احتمال: might
+12|You were wrong not to tell me. You ___ have told me earlier!|should|must|can|will|لوم على الماضي: should have + V3
+12|It's a company rule: she ___ to wear a uniform at work.|has|must|should|can|إلزام بقاعدة: has to
+12|He can ___ the guitar.|play|to play|plays|playing|بعد modal: فعل مجرد
+12|You ___ smoke in hospitals.|aren't allowed to|don't have to|needn't|aren't need to|ممنوع: aren't allowed to
+12|They ___ arrive soon; the plane has landed.|should|can't|mustn't|needn't|توقع منطقي: should
+12|She ___ drive when she was 18.|could|can|must|should|قدرة في الماضي: could
+12|Which sentence is correct?|She must study harder.|She must to study harder.|She musts study harder.|She must studies harder.|modal + فعل مجرد بدون to و s
+12|Which sentence is correct?|You don't have to pay; it's free.|You mustn't pay; it's free.|You can't to pay; it's free.|You don't must pay; it's free.|مجاني يعني غير ضروري: don't have to
+13|“I like pizza,” she said. → She said she ___ pizza.|liked|likes|has liked|is liking|Present Simple → Past Simple
+13|“I am working,” he said. → He said he ___ working.|was|is|has been|will be|am → was
+13|“I will help you,” she said. → She said she ___ help me.|would|will|shall|can|will → would
+13|“I can swim,” he said. → He said he ___ swim.|could|can|may|will|can → could
+13|“I saw the film,” she said. → She said she ___ the film.|had seen|has seen|sees|was see|Past Simple → Past Perfect
+13|“Where do you live?” he asked. → He asked me where I ___.|lived|live|did live|do live|السؤال المنقول بترتيب عادي مع رجوع الزمن
+13|“Are you tired?” she asked. → She asked if I ___ tired.|was|am|were I|is|are → was، وترتيب عادي
+13|“Don't be late,” the teacher said. → The teacher told us ___ late.|not to be|don't be|to not being|not be|النهي المنقول: told + not to + V
+13|“Close the door,” he said. → He told me ___ the door.|to close|close|closing|closed|الأمر المنقول: told + to + V
+13|“I have finished,” she said. → She said she ___.|had finished|has finished|finishes|finishing|Present Perfect → Past Perfect
+13|“What time is it?” he asked. → He asked what time ___.|it was|was it|is it|it is|ترتيب عادي: it was
+13|“We are going to travel,” they said. → They said they ___ travel.|were going to|are going to|will|go to|are → were
+13|“I must leave,” he said. → He said he ___ leave.|had to|must to|has|haves to|must → had to
+13|She said, “I live here.” → She said she lived ___.|there|here|this place|these|here → there
+13|He said, “I'm busy today.” → He said he was busy ___.|that day|today|tomorrow|yesterday|today → that day
+13|“I'll call you tomorrow,” she said. → She said she would call me ___.|the next day|tomorrow|yesterday|the day before|tomorrow → the next day
+13|“Did you finish?” he asked. → He asked whether I ___.|had finished|did finish|have finished|finished I|did + V → had + V3
+13|She ___ me that she was tired.|told|said|says to|talked|told + شخص
+13|He ___ that he was hungry.|said|told|told to|talked|said بدون شخص بعده
+13|“Please help me,” she said. → She asked me ___ her.|to help|help|helping|helped|الطلب المنقول: asked + to + V
+13|“Why are you crying?” she asked. → She asked me why I ___ crying.|was|am|were|is|am → was
+13|“I don't know,” he said. → He said he ___ know.|didn't|doesn't|don't|hasn't|don't → didn't
+13|“We met last year,” she said. → She said they had met ___.|the year before|last year|next year|this year|last year → the year before
+13|“Can you drive?” he asked. → He asked if I ___ drive.|could|can|could I|may|can → could، بترتيب عادي
+13|“I am writing a letter,” Ali said. → Ali said he ___ a letter.|was writing|is writing|writes|has written|Present Continuous → Past Continuous
+13|“Is this your bag?” she asked. → She asked if that ___ my bag.|was|is|were|be|is → was، وthis → that
+13|“Don't touch it!” Mum said. → Mum told me ___ it.|not to touch|to don't touch|don't touch|not touching|told + not to + V
+13|“I may come,” he said. → He said he ___ come.|might|may to|will|can|may → might
+13|Which sentence is correct?|She asked me where I worked.|She asked me where did I work.|She asked me where do I work.|She asked me where I work did.|السؤال المنقول بترتيب الجملة العادية
+13|Which sentence is correct?|He told me that he was tired.|He said me that he was tired.|He told that he was tired.|He said to me he is tired yesterday.|told + شخص، said بدون شخص
+14|How ___ students are in your class?|many|much|little|less|معدود: many
+14|We don't have ___ time.|much|many|few|a few|غير معدود: much
+14|There are ___ apples left; let's buy more.|few|little|much|less|معدود وقليل جداً: few
+14|I have ___ money, enough for a coffee.|a little|a few|many|few|غير معدود وكمية بسيطة كافية: a little
+14|She has ___ friends in Sohar, so she isn't lonely.|a few|a little|much|little|معدود وعدد بسيط كافٍ: a few
+14|Can I have ___ water, please?|some|any|many|a few|في الطلب: some
+14|Is there ___ milk in the fridge?|any|many|a few|few|في السؤال: any
+14|I need ___ advice.|some|an|a few|many|advice غير معدود: some
+14|There isn't ___ sugar left.|any|some|many|few|في النفي: any
+14|___ people came to the meeting than we expected.|Fewer|Less|Little|Much|معدود: fewer
+14|You should eat ___ sugar.|less|fewer|few|many|غير معدود: less
+14|How ___ does it cost?|much|many|few|lot|السعر: How much
+14|There are ___ of people at the beach.|a lot|much|many|a many|a lot of
+14|He has ___ experience in teaching.|a lot of|many|a few|several|experience غير معدود: a lot of
+14|I bought ___ new furniture.|some|a|many|a few|furniture غير معدود: some
+14|___ of the students passed the exam.|All|Every|Much|Little|All of + جمع
+14|___ student has a locker.|Every|All|Many|Most|every + مفرد
+14|There is too ___ noise here.|much|many|few|a few|noise غير معدود: much
+14|There are too ___ cars on the road.|many|much|little|less|cars معدود: many
+14|I have ___ questions for you.|several|much|a little|little|questions معدود: several
+14|We have ___ information about the project.|enough|many|a few|several|information غير معدود: enough
+14|She drinks ___ coffee every day.|a lot of|many|a few|several|coffee غير معدود: a lot of
+14|Not ___ people know this.|many|much|little|less|people معدود: many
+14|I've got ___ homework tonight.|a lot of|many|a few|several|homework غير معدود
+14|There were ___ mistakes in your essay; well done!|very few|very little|much|a little|mistakes معدود: very few
+14|Hurry up! We have very ___ time.|little|few|many|a few|time غير معدود: little
+14|Could you give me ___ information about the course?|some|an|a|many|information غير معدود: some
+14|Which word is uncountable?|luggage|suitcase|bag|box|luggage غير معدود
+14|Which sentence is correct?|I need some information.|I need an information.|I need some informations.|I need many information.|information لا تُجمع ولا تأخذ an
+14|Which sentence is correct?|There are fewer people today.|There are less people today.|There is fewer people today.|There are little people today.|people معدود: fewer
+15|___ the rain, we went out.|Despite|Although|However|Because|بعدها اسم (the rain): Despite
+15|___ she was tired, she finished her work.|Although|Despite|However|In spite|بعدها جملة: Although
+15|It was expensive. ___, I bought it.|However|Although|Despite|Because|تناقض بين جملتين: However
+15|He didn't study, ___ he failed.|so|because|although|despite|نتيجة: so
+15|I stayed home ___ I was sick.|because|so|although|despite|سبب + جملة: because
+15|The match was cancelled ___ the storm.|because of|because|although|so|سبب + اسم: because of
+15|___ you study, you won't pass.|Unless|If|Although|Because|unless = if not
+15|She is clever. ___, she is very kind.|Moreover|However|Although|Despite|إضافة: Moreover
+15|___ being ill, he went to school.|In spite of|Although|However|Even though|بعدها V-ing: In spite of
+15|Take an umbrella ___ it rains.|in case|unless|although|despite|in case = تحسباً
+15|The road was closed; ___, we took another route.|therefore|although|despite|unless|نتيجة: therefore
+15|I like tea, ___ my sister prefers coffee.|whereas|because|so|unless|مقارنة متناقضة: whereas
+15|___ it was late, the shops were still open.|Even though|Despite|However|Because of|بعدها جملة وتناقض: Even though
+15|He worked hard ___ he could buy a car.|so that|because|although|unless|هدف: so that
+15|___ you finish, call me.|When|Although|Despite|Unless|وقت: When
+15|You can borrow my car ___ you drive carefully.|as long as|although|despite|unless|شرط: as long as
+15|She was late ___ the traffic.|due to|because|although|however|سبب + اسم: due to
+15|First, open the file. ___, click save.|Then|However|Although|Despite|ترتيب: Then
+15|___, I would like to thank my teachers.|Finally|Although|Despite|Unless|ختام: Finally
+15|He is rich, ___ he is not happy.|but|so|because|unless|تناقض: but
+15|___ having a map, they got lost.|Despite|Although|However|Unless|بعدها V-ing: Despite
+15|The company lost money. ___, it closed two branches.|As a result|Although|Despite|However|نتيجة: As a result
+15|___ the test was hard, most students passed.|Although|Despite|However|Because of|بعدها جملة: Although
+15|I'll go ___ you come with me.|if|although|despite|however|شرط: if
+15|We can go to the beach ___ the park, but not both.|or|but|so|because|اختيار: or
+15|She speaks English ___ French.|as well as|although|despite|unless|إضافة: as well as
+15|He failed the exam ___ he studied hard.|even though|because|so|despite|تناقض + جملة: even though
+15|___ example, Oman has many beautiful wadis.|For|Such|As|Like|For example
+15|Which sentence is correct?|Despite the rain, they played.|Despite it rained, they played.|Although the rain, they played.|Despite of the rain, they played.|Despite + اسم، بدون of
+15|Which sentence is correct?|Although he was tired, he kept working.|Although he was tired, but he kept working.|Despite he was tired, he kept working.|However he was tired, he kept working.|لا نجمع although و but
+16|“Accurate” is closest in meaning to:|correct|quick|cheap|old|accurate = دقيق وصحيح
+16|The opposite of “ancient” is:|modern|old|historic|antique|ancient = قديم جداً، عكسها modern
+16|The noise ___ my concentration.|affected|effected|afforded|efforted|affect فعل بمعنى يؤثر
+16|Can I ___ your car for the weekend?|borrow|lend|rent out|give|أنا آخذ مؤقتاً: borrow
+16|Prices ___ every year.|rise|raise|arise|rose|يرتفع بنفسه (بدون مفعول): rise
+16|Please ___ your shoes before entering the mosque.|take off|put on|take on|put off|take off = يخلع
+16|I need to ___ a decision.|make|do|have|get|make a decision
+16|She ___ her homework every evening.|does|makes|takes|gets|do homework
+16|“Purchase” means:|buy|sell|return|borrow|purchase = يشتري
+16|The opposite of “increase” is:|decrease|rise|grow|raise|increase = يزيد، عكسها decrease
+16|He ___ up smoking last year.|gave|took|made|put|give up = يترك / يستسلم
+16|Please ___ in the form and return it.|fill|full|feel|fall|fill in a form = يعبّئ نموذجاً
+16|“Assist” is closest in meaning to:|help|stop|ask|leave|assist = يساعد
+16|I'm going to ___ after my little brother today.|look|see|watch|take|look after = يعتني
+16|The flight was ___ because of the fog.|delayed|early|arrived|landed|delayed = متأخر
+16|A “reliable” person is someone who:|can be trusted|is always late|talks a lot|is very rich|reliable = يُعتمد عليه
+16|She has a lot of ___ in teaching.|experience|experiment|expert|expensive|experience = خبرة
+16|Can you ___ me how to get to the station?|tell|say|speak|talk|tell + شخص
+16|The opposite of “generous” is:|mean|kind|friendly|polite|generous = كريم، عكسها mean = بخيل
+16|We need to ___ a solution to this problem.|find|found|look|see|find a solution
+16|He ___ the bus because he woke up late.|missed|lost|failed|left|miss the bus = تفوته الحافلة
+16|“Rapid” is closest in meaning to:|fast|slow|large|quiet|rapid = سريع
+16|I'm ___ forward to the weekend.|looking|seeing|watching|waiting|look forward to = يتطلع إلى
+16|The ___ of the meeting is to plan the budget.|purpose|purse|propose|pursue|purpose = هدف
+16|She ___ a lot of money on clothes.|spends|pays|costs|buys|spend money on
+16|This dress ___ 30 rials.|costs|pays|spends|prices|cost = يكلّف
+16|The company will ___ new staff next month.|recruit|retire|resign|reduce|recruit = يوظّف
+16|“Obtain” is closest in meaning to:|get|lose|give|throw|obtain = يحصل على
+16|I'll ___ you up at the airport.|pick|take|put|turn|pick up = يأخذ شخصاً بالسيارة
+16|Choose the correct spelling:|necessary|neccessary|necesary|neccesary|necessary: c واحدة و ss
+17|When did the company start producing solar panels?|2021|2020|2023|2024|النص: started producing solar panels in 2021|A
+17|Who were most of its first customers?|local farms|hotels|schools|the government|النص: mostly to local farms|A
+17|What happened after the contract with the hotel chain?|Sales tripled.|Sales fell.|The company closed.|Prices doubled.|النص: its sales tripled|A
+17|According to the manager, what is the biggest challenge?|finding skilled workers|technology|money|competition|النص: not technology but finding skilled workers|A
+17|The word “maintain” in the passage is closest in meaning to:|keep in good condition|sell|build|design|maintain = يحافظ على الشيء بحالة جيدة|A
+17|What did most workers in the survey say?|They completed more tasks at home.|They were less productive at home.|They preferred the office.|They wanted more meetings.|النص: 60% said they completed more tasks at home|B
+17|Which is NOT given as a reason for working better at home?|a higher salary|fewer interruptions|no time lost travelling|none of these|الراتب لم يُذكر في النص|B
+17|What percentage of workers felt lonely?|45%|40%|50%|60%|النص: 45% said they felt lonely|B
+17|What do the researchers suggest?|a mix of home and office work|only working from home|only working in the office|doing more surveys|النص: a mix of home and office work|B
+17|The phrase “on the other hand” is used to:|show a contrast|add a similar idea|give an example|end the text|on the other hand تدل على تناقض|B
+17|How old are the children in the programme?|7 to 12|5 to 10|10 to 15|12 to 18|النص: children aged 7 to 12|C
+17|When do the sessions take place?|Every Saturday|Every Friday|Every Sunday|Every evening|النص: Every Saturday|C
+17|What happens to the best story each month?|It is printed in the newsletter.|It wins money.|It is read on TV.|It is sent to schools.|النص: printed in the library's newsletter|C
+17|How many children have joined so far?|more than 80|fewer than 50|about 60|exactly 100|النص: more than 80 children have joined|C
+17|Why are parents happy?|Children spend less time on phones and more with books.|The programme is free.|Their children make new friends.|The volunteers are teachers.|النص: less time on phones and more time with books|C
+17|Where is Rashid's farm?|near Ibri|near Sur|in Muscat|in Salalah|النص: a small date farm near Ibri|D
+17|Why do they harvest the dates by hand?|Machines can damage the fruit.|It is cheaper.|It is faster.|They have no money.|النص: because machines can damage the fruit|D
+17|Why was last year's harvest smaller?|very hot weather and a lack of rain|too much rain|the workers left|the trees were old|النص: very hot weather and a lack of rain|D
+17|What did Rashid install?|a new irrigation system|new machines|solar panels|a new shop|النص: a new irrigation system that uses less water|D
+17|The word “harvest” means:|collect the crops|plant the seeds|sell the fruit|water the trees|harvest = يحصد المحصول|D
+17|What is the purpose of the email?|to invite her to an interview|to offer her the job|to reject her application|to ask for payment|النص: pleased to invite you to an interview|E
+17|On which day is the interview?|Tuesday|Monday|Friday|Sunday|النص: on Tuesday, 12 November|E
+17|How long will the interview last?|about 45 minutes|15 minutes|30 minutes|two hours|النص: about 45 minutes|E
+17|What should the candidate bring?|her CV and university certificate|a laptop|a photo|a reference letter|النص: bring a copy of your CV and your university certificate|E
+17|What should she do if she cannot attend?|contact them by Friday|come on another day|send her CV again|call on Tuesday|النص: please contact us by Friday|E
+17|How many hours of sleep do experts recommend?|seven to nine|five to six|ten to twelve|four to five|النص: seven to nine hours a night|F
+17|Which is NOT mentioned as an effect of lack of sleep?|weight gain|difficulty concentrating|problems remembering|difficulty controlling emotions|زيادة الوزن لم تُذكر في النص|F
+17|Why can phones affect sleep?|The bright screen makes the brain think it is daytime.|They are noisy.|They are expensive.|They get hot.|النص: the bright screen makes the brain think it is still daytime|F
+17|What solution does the text suggest?|Stop using screens an hour before bed.|Buy a new phone.|Sleep in the afternoon.|Drink coffee at night.|النص: stop using screens at least one hour before going to bed|F
+17|The word “essential” is closest in meaning to:|very important|dangerous|optional|rare|essential = ضروري جداً|F`;
+const QS = RAW.trim().split('\n').map(l => {
+  const f = l.split('|');
+  const o = shuffle([f[2],f[3],f[4],f[5]]);
+  return {r:+f[0], q:f[1], o, a:o.indexOf(f[2]), e:f[6], p:f[7] || undefined};
+});
+
+// ================= المنطق =================
+let view = 'home', list = [], idx = 0, ans = {}, timed = false, left = 0, tid = null, cur = 0;
+
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function go(v){ clearInterval(tid); view = v; render(); }
+function openRule(r){ clearInterval(tid); cur = r; view = 'rule'; render(); }
+
+function startList(arr, isTimed){
+  list = arr; idx = 0; ans = {}; timed = isTimed; view = 'quiz';
+  clearInterval(tid);
+  if (isTimed) { left = 30*60; tid = setInterval(tick, 1000); }
+  render();
+}
+function startAll(){ startList(QS.map((_,i)=>i), false); }
+function startExam(){ startList(shuffle(QS.map((_,i)=>i)).slice(0,35), true); }
+function startRule(r){ startList(QS.map((q,i)=>q.r===r?i:-1).filter(i=>i>=0), false); }
+
+function tick(){
+  left--;
+  if (left <= 0) { left = 0; finish(); return; }
+  const el = document.getElementById('timer');
+  if (el) el.textContent = fmt(left);
+}
+function fmt(s){ return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0'); }
+function finish(){ clearInterval(tid); view = 'results'; render(); }
+
+function pick(i){
+  if (!timed && ans[idx] !== undefined) return;
+  ans[idx] = i; render();
+}
+function next(){ if (idx < list.length-1) { idx++; render(); } else finish(); }
+function prev(){ if (idx > 0) { idx--; render(); } }
+function jump(i){ idx = i; render(); }
+
+function render(){
+  const app = document.getElementById('app');
+  let h = '';
+
+  if (view === 'home') {
+    h = `<h1>تدريب اختبار الإنجليزي</h1>
+      <p class="muted">${RULES.length} درس قواعد مع الشرح، و30 سؤال لكل قاعدة (المجموع ${QS.length} سؤال)، وكلها من تأليف المنصة.</p>
+      <button class="big" onclick="go('lessons')">📘 الدروس: شرح كل قاعدة</button>
+      <button class="big" onclick="startAll()">✏️ تدريب على كل الأسئلة مع التصحيح الفوري</button>
+      <button class="big" onclick="startExam()">⏱️ اختبار محاكاة: 35 سؤال عشوائي في 30 دقيقة</button>`;
+  }
+
+  else if (view === 'lessons') {
+    h = `<h1>الدروس</h1>`;
+    RULES.forEach((r,i) => {
+      h += `<button class="big sec" onclick="openRule(${i})">${i+1}. ${r.ar} <span class="muted">(${r.en})</span></button>`;
+    });
+    h += `<button onclick="go('home')">الرئيسية</button>`;
+  }
+
+  else if (view === 'rule') {
+    const r = RULES[cur];
+    const n = QS.filter(q=>q.r===cur).length;
+    h = `<div class="muted">الدرس ${cur+1} من ${RULES.length}</div><h1>${r.ar}</h1><div class="muted en">${r.en}</div>${r.body}
+      <button onclick="startRule(${cur})">تدرّبي على أسئلة هذه القاعدة (${n})</button>
+      ${cur>0?`<button class="sec" onclick="openRule(${cur-1})">الدرس السابق</button>`:''}
+      ${cur<RULES.length-1?`<button class="sec" onclick="openRule(${cur+1})">الدرس التالي</button>`:''}
+      <button class="sec" onclick="go('lessons')">كل الدروس</button>`;
+  }
+
+  else if (view === 'quiz') {
+    const q = QS[list[idx]];
+    const answered = ans[idx] !== undefined;
+    h = `<div class="muted">${RULES[q.r].ar} | السؤال ${idx+1} من ${list.length}</div>`;
+    if (timed) h += `<div>الوقت المتبقي: <span id="timer">${fmt(left)}</span></div>`;
+    if (q.p) h += `<div class="muted">اقرئي النص ثم أجيبي:</div><div class="passage">${esc(PASSAGES[q.p])}</div>`;
+    h += `<h2 class="en">${esc(q.q)}</h2>`;
+    q.o.forEach((opt,i) => {
+      let cls = '';
+      if (!timed && answered) { if (i === q.a) cls = ' ok'; else if (ans[idx] === i) cls = ' bad'; }
+      else if (ans[idx] === i) cls = ' sel';
+      h += `<button class="opt${cls}" onclick="pick(${i})">${esc(opt)}</button>`;
+    });
+    if (!timed && answered) {
+      const ok = ans[idx] === q.a;
+      h += `<div class="fb"><b>${ok ? 'إجابة صحيحة' : 'إجابة خاطئة. الصحيح: <span class="en">' + esc(q.o[q.a]) + '</span>'}</b><br>${esc(q.e)}</div>
+        <button onclick="next()">${idx === list.length-1 ? 'عرض النتيجة' : 'التالي'}</button>
+        <button class="sec" onclick="openRule(${q.r})">شرح القاعدة</button>`;
+    }
+    if (timed) {
+      h += `<div style="margin-top:12px"><button onclick="prev()">السابق</button><button onclick="next()">${idx === list.length-1 ? 'إنهاء الاختبار' : 'التالي'}</button></div><div class="pal">`;
+      list.forEach((_,i) => { h += `<button class="${i===idx?'cur':(ans[i]!==undefined?'done':'')}" onclick="jump(${i})">${i+1}</button>`; });
+      h += `</div><button onclick="finish()">إنهاء الاختبار الآن</button>`;
+    } else {
+      h += `<br><button class="sec" onclick="go('home')">الرئيسية</button>`;
+    }
+  }
+
+  else if (view === 'results') {
+    let total = 0;
+    const per = RULES.map(() => ({c:0,n:0}));
+    const wrong = [];
+    list.forEach((qi,i) => {
+      const q = QS[qi]; per[q.r].n++;
+      if (ans[i] === q.a) { total++; per[q.r].c++; } else wrong.push({i,q});
+    });
+    h = `<h1>النتيجة: ${total} من ${list.length} (${Math.round(total/list.length*100)}%)</h1><h3>حسب القاعدة</h3>`;
+    RULES.forEach((r,i) => {
+      if (per[i].n) h += `<div class="row"><span>${r.ar}</span><span>${per[i].c} / ${per[i].n}</span></div>`;
+    });
+    h += `<h3>الأسئلة الخاطئة والشرح</h3>`;
+    if (!wrong.length) h += `<p>ممتاز! كل الإجابات صحيحة.</p>`;
+    wrong.forEach(({i,q}) => {
+      h += `<div class="wrong"><div class="en"><b>${i+1}. ${esc(q.q)}</b></div>
+        إجابتك: <span class="en">${ans[i]===undefined?'لم تجيبي':esc(q.o[ans[i]])}</span><br>
+        الصحيح: <span class="en">${esc(q.o[q.a])}</span><br>
+        <span class="muted">${esc(q.e)}</span><br>
+        <button class="sec" onclick="openRule(${q.r})">شرح القاعدة: ${RULES[q.r].ar}</button></div>`;
+    });
+    h += `<br><button onclick="go('home')">الرئيسية</button>`;
+  }
+
+  app.innerHTML = h;
+  window.scrollTo(0,0);
+}
+
+render();
+</script>
+</body>
+</html>
