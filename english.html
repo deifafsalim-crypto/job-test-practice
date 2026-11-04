@@ -30,6 +30,12 @@
   .pal button.cur{background:#f0a500;color:#fff}
   .row{display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding:6px 0}
   .wrong{border-bottom:1px solid #eee;padding:10px 0;line-height:1.8}
+  .tbl{overflow-x:auto;margin:10px 0;border:1px solid #d5e3da;border-radius:10px}
+  .tbl table{border-collapse:collapse;min-width:720px;width:100%;font-size:15px}
+  .tbl th{background:#1f4f38;color:#fff;padding:10px;text-align:right}
+  .tbl td{padding:10px;border-top:1px solid #e3ece6;vertical-align:top;line-height:1.6}
+  .tbl tr:nth-child(even) td{background:#f6faf7}
+  .tbl td.en{direction:ltr;text-align:left}
   #timer{font-weight:bold;font-size:20px;color:#d64545}
 </style>
 </head>
@@ -59,6 +65,14 @@ const RULES = [
 <p>التركيب: <b>have / has + V3</b>. لحدث وقته غير محدد، أو بدأ في الماضي وما زال مستمراً، أو له أثر الآن.</p>
 <p>كلمات دالة: ever, never, already, yet, just, since, for</p>
 <div class="ex">She <b>has lived</b> in Muscat since 2020. / <b>Have</b> you ever <b>been</b> to London?</div>
+<h3>Present Perfect Continuous</h3>
+<p>التركيب: <b>have / has been + V-ing</b>. لحدث بدأ في الماضي وما زال مستمراً، ونركز فيه على المدة.</p>
+<p>كلمات دالة: for, since, all day, how long</p>
+<div class="ex">I <b>have been studying</b> for 2 hours.<br>How long <b>have</b> you <b>been waiting</b>?</div>
+<h3>Past Continuous</h3>
+<p>التركيب: <b>was / were + V-ing</b>. لحدث كان مستمراً في وقت معين في الماضي، أو قطعه حدث ثاني.</p>
+<p>كلمات دالة: while, when, at that time, at 8 pm yesterday</p>
+<div class="ex">I <b>was watching</b> TV at 8 pm.<br>She <b>was cooking</b> when the phone rang.</div>
 <div class="tip"><b>since</b> + نقطة بداية (since 2020) و <b>for</b> + مدة (for three years). ولا نقول I have seen him yesterday، لأن yesterday وقت محدد يحتاج Past Simple.</div>`},
 
 {en:'Past Perfect', ar:'الماضي التام', body:`
@@ -228,6 +242,19 @@ const RULES = [
 <li>الجواب الصحيح غالباً يكون بكلمات مختلفة عن النص (إعادة صياغة).</li>
 <li>كلمات مثل however و on the other hand تدل على تناقض.</li>
 <li>لا تجيبي من معلوماتك العامة، الجواب لازم يكون من النص.</li>
+</ol>`},
+{en:'Summary of the 10 Tenses', ar:'ملخص الأزمنة العشرة', body:`
+<p>جدول يجمع كل الأزمنة في مكان واحد: الصيغة، ومتى نستخدمها، ومثال، والكلمات اللي تدل عليها. الكلمات الدالة هي أسرع طريقة تعرفين فيها الزمن المطلوب في السؤال.</p>
+<div class="tbl"><table>
+<thead><tr><th>الزمن</th><th>الصيغة</th><th>الاستخدام</th><th>مثال</th><th>كلمات دالة</th></tr></thead>
+<tbody><tr><td><b>المضارع البسيط</b><div class="en muted">Present Simple</div></td><td class="en">I / You / We / They + V<br>He / She / It + V(s / es)</td><td>عادة متكررة أو حقيقة ثابتة</td><td class="en">I eat breakfast every day.</td><td class="en">always, usually, often, every day, once a week</td></tr><tr><td><b>المضارع المستمر</b><div class="en muted">Present Continuous</div></td><td class="en">am / is / are + V-ing</td><td>حدث يحصل الآن، أو وضع مؤقت</td><td class="en">She is studying now.</td><td class="en">now, at the moment, right now, currently</td></tr><tr><td><b>المضارع التام</b><div class="en muted">Present Perfect</div></td><td class="en">have / has + V3</td><td>حدث في الماضي له علاقة أو نتيجة في الحاضر</td><td class="en">I have finished my work.</td><td class="en">already, yet, just, ever, never, since, for</td></tr><tr><td><b>المضارع التام المستمر</b><div class="en muted">Present Perfect Continuous</div></td><td class="en">have / has been + V-ing</td><td>حدث بدأ في الماضي وما زال مستمراً لين الحين</td><td class="en">I have been studying for 2 hours.</td><td class="en">for, since, all day, how long</td></tr><tr><td><b>الماضي البسيط</b><div class="en muted">Past Simple</div></td><td class="en">V-ed (منتظم)<br>أو الفعل الشاذ</td><td>حدث بدأ وانتهى في وقت محدد في الماضي</td><td class="en">I visited my friend yesterday.</td><td class="en">yesterday, last night, last week, ago, in 2010</td></tr><tr><td><b>الماضي المستمر</b><div class="en muted">Past Continuous</div></td><td class="en">was / were + V-ing</td><td>حدث كان مستمراً في وقت معين في الماضي</td><td class="en">I was watching TV at 8 pm.</td><td class="en">while, when, at that time, at 8 pm yesterday</td></tr><tr><td><b>الماضي التام</b><div class="en muted">Past Perfect</div></td><td class="en">had + V3</td><td>حدث انتهى قبل حدث ثاني في الماضي</td><td class="en">I had eaten before he came.</td><td class="en">before, after, by the time</td></tr><tr><td><b>المستقبل البسيط</b><div class="en muted">Future Simple</div></td><td class="en">will + V</td><td>حدث بيصير في المستقبل</td><td class="en">I will travel tomorrow.</td><td class="en">tomorrow, next week, next year, in the future</td></tr><tr><td><b>المستقبل المستمر</b><div class="en muted">Future Continuous</div></td><td class="en">will be + V-ing</td><td>حدث بيكون مستمر في وقت معين في المستقبل</td><td class="en">I will be studying at 10 pm.</td><td class="en">at this time tomorrow, at 10 pm, this time next week</td></tr><tr><td><b>المستقبل التام</b><div class="en muted">Future Perfect</div></td><td class="en">will have + V3</td><td>حدث بينتهي قبل وقت معين في المستقبل</td><td class="en">I will have finished by 5 pm.</td><td class="en">by, before, by the time</td></tr></tbody></table></div>
+<div class="tip"><b>was</b> مع I / he / she / it، و <b>were</b> مع you / we / they (في الماضي المستمر وفي فعل be).</div>
+<h3>طريقة سريعة في الاختبار</h3>
+<ol>
+<li>دوري على الكلمة الدالة في الجملة (yesterday، since، by the time...).</li>
+<li>حددي الزمن: ماضي، حاضر، أو مستقبل.</li>
+<li>حددي النوع: بسيط (حدث)، مستمر (be + ing)، تام (have / had / will have + V3).</li>
+<li>تأكدي من الفاعل: he / she / it يحتاج s في المضارع البسيط، و has في التام.</li>
 </ol>`}
 ];
 
@@ -831,15 +858,16 @@ function render(){
 
   if (view === 'home') {
     h = `<h1>تدريب اختبار الإنجليزي</h1>
-      <p class="muted">${RULES.length} درس قواعد مع الشرح، و30 سؤال لكل قاعدة (المجموع ${QS.length} سؤال)، وكلها من تأليف المنصة.</p>
+      <p class="muted">${RULES.length-1} درس قواعد وملخص للأزمنة مع الشرح، و30 سؤال لكل قاعدة (المجموع ${QS.length} سؤال)، وكلها من تأليف المنصة.</p>
       <button class="big" onclick="go('lessons')">📘 الدروس: شرح كل قاعدة</button>
       <button class="big" onclick="startAll()">✏️ تدريب على كل الأسئلة مع التصحيح الفوري</button>
       <button class="big" onclick="startExam()">⏱️ اختبار محاكاة: 35 سؤال عشوائي في 30 دقيقة</button>`;
   }
 
   else if (view === 'lessons') {
-    h = `<h1>الدروس</h1>`;
+    h = `<h1>الدروس</h1><button class="big" onclick="openRule(${RULES.length-1})">📋 ملخص الأزمنة العشرة (ابدئي من هنا)</button>`;
     RULES.forEach((r,i) => {
+      if (i === RULES.length-1) return;
       h += `<button class="big sec" onclick="openRule(${i})">${i+1}. ${r.ar} <span class="muted">(${r.en})</span></button>`;
     });
     h += `<button onclick="go('home')">الرئيسية</button>`;
@@ -849,7 +877,7 @@ function render(){
     const r = RULES[cur];
     const n = QS.filter(q=>q.r===cur).length;
     h = `<div class="muted">الدرس ${cur+1} من ${RULES.length}</div><h1>${r.ar}</h1><div class="muted en">${r.en}</div>${r.body}
-      <button onclick="startRule(${cur})">تدرّبي على أسئلة هذه القاعدة (${n})</button>
+      ${n ? `<button onclick="startRule(${cur})">تدرّبي على أسئلة هذه القاعدة (${n})</button>` : `<button onclick="startRule(0)">ابدئي بأسئلة المضارع</button>`}
       ${cur>0?`<button class="sec" onclick="openRule(${cur-1})">الدرس السابق</button>`:''}
       ${cur<RULES.length-1?`<button class="sec" onclick="openRule(${cur+1})">الدرس التالي</button>`:''}
       <button class="sec" onclick="go('lessons')">كل الدروس</button>`;
