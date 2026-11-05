@@ -458,7 +458,12 @@ function renderQuiz(){
   ${state.qi<state.qz.length-1?`<button onclick="state.qi++;render()">التالي</button>`:`<button onclick="state.qdone=true;render()">إنهاء الاختبار وعرض النتيجة</button>`}</div>`;
 }
 
-render();
+function fromHash(){ const h=location.hash.slice(1);
+  if(h==='quiz') return startQuiz();
+  if(['learn','table','common','games'].includes(h)) state.view=h;
+  render(); }
+window.addEventListener('hashchange', fromHash);
+fromHash();
 </script>
 </body>
 </html>

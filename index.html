@@ -1,8 +1,46 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>تدريب اختبارات التوظيف</title>
-<style>body{font-family:system-ui,Tahoma,sans-serif;background:#f4f6fb;margin:0;padding:16px}.card{background:#fff;max-width:600px;margin:40px auto;border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.08);text-align:center}a{display:block;margin:12px 0;padding:16px;border-radius:10px;color:#fff;text-decoration:none;font-size:19px}.a{background:#3867d6}.e{background:#1f8a5b}.v{background:#1e2a4a}</style></head>
-<body><div class="card"><h1>تدريب اختبارات التوظيف</h1>
-<a class="a" href="aptitude.html">اختبار القدرات Aptitude (132 سؤال)</a>
-<a class="e" href="english.html">اختبار الإنجليزي (18 قاعدة + ملخص الأزمنة، و540 سؤال)</a>
-<a class="v" href="verbs.html">الأفعال الشاذة (73 فعل، 20 لعبة واختبار)</a></div></body></html>
+<style>
+body{font-family:system-ui,Tahoma,sans-serif;background:#f4f6fb;margin:0;padding:16px;color:#1e2a4a}
+.card{background:#fff;max-width:640px;margin:24px auto;border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+h1{text-align:center;margin:0 0 12px}h2{margin:0 0 8px;font-size:22px}
+a.btn{display:block;margin:10px 0;padding:16px;border-radius:10px;color:#fff;text-decoration:none;font-size:19px;text-align:center}
+.a{background:#3867d6}.e{background:#1f8a5b}.v{background:#1e2a4a}
+.sub{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.sub a{display:block;padding:14px;border-radius:10px;background:#e3ecf5;color:#1e2a4a;text-decoration:none;font-size:16px;text-align:center;min-height:44px}
+.sub a.wide{grid-column:1/-1}
+p,li{line-height:1.9}
+.box{background:#f4f8fc;border-radius:10px;padding:12px 14px;margin:10px 0}
+.en{direction:ltr;unicode-bidi:isolate}
+</style></head>
+<body>
+<div class="card"><h1>تدريب اختبارات التوظيف</h1>
+<a class="btn a" href="aptitude.html">اختبار القدرات Aptitude (132 سؤال)</a>
+<a class="btn e" href="english.html">اختبار الإنجليزي (18 قاعدة + ملخص الأزمنة، و540 سؤال)</a>
+</div>
+
+<div class="card" id="verbs">
+<h2>الأفعال الشاذة (Irregular Verbs)</h2>
+<p>الفعل الشاذ ما ياخذ <span class="en">ed</span> في الماضي، وله 3 صور لازم تنحفظ:</p>
+<div class="box">
+<b class="en">V1</b> الأساسي: <span class="en">go</span>، بعد <span class="en">did / will / can / to</span> وفي المضارع<br>
+<b class="en">V2</b> الماضي البسيط: <span class="en">went</span>، في الجملة المثبتة فقط<br>
+<b class="en">V3</b> التصريف الثالث: <span class="en">gone</span>، بعد <span class="en">have / has / had</span> وفي المبني للمجهول بعد <span class="en">was / is</span>
+</div>
+<p><b>وش اللي ما يتغير؟</b></p>
+<ul>
+<li>V2 و V3 نفس الشكل مع كل الضمائر، إلا <span class="en">was / were</span>.</li>
+<li>ما فيه <span class="en">s</span> في الماضي: <span class="en">She went</span>.</li>
+<li>بعد <span class="en">did / didn't</span> يرجع V1: <span class="en">I didn't go</span>.</li>
+<li>8 أفعال ما تتغير أبداً: <span class="en">cost, cut, hit, let, put, read, set, shut</span>.</li>
+</ul>
+<div class="sub">
+<a href="verbs.html#learn">الشرح الكامل والأنماط</a>
+<a href="verbs.html#table">جدول الأفعال (73 فعل)</a>
+<a href="verbs.html#common">الأفعال الشائعة والفخاخ</a>
+<a href="verbs.html#games">الألعاب (20 لعبة)</a>
+<a class="wide" href="verbs.html#quiz">الاختبار الشامل (30 سؤال)</a>
+</div>
+</div>
+</body></html>
