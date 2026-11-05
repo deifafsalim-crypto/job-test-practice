@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>الأفعال الشاذة: شرح وألعاب واختبار</title>
+<style>
+  body{font-family:system-ui,Tahoma,sans-serif;background:#f2f5fa;margin:0;padding:14px;color:#1e2a4a}
+  .card{background:#fff;max-width:780px;margin:auto;border-radius:14px;padding:20px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+  h1{font-size:23px;margin:0 0 10px} h2{font-size:20px;margin:14px 0 8px} h3{font-size:18px;margin:16px 0 6px;color:#1b5e8c}
+  p,li{line-height:1.9}
+  button{font-family:inherit;font-size:17px;padding:12px 16px;border:0;border-radius:10px;background:#1b5e8c;color:#fff;cursor:pointer;margin:4px;min-height:44px}
+  button.sec{background:#e3ecf5;color:#1e2a4a}
+  button.big{display:block;width:100%;text-align:right;margin:8px 0}
+  button.opt{display:block;width:100%;text-align:left;direction:ltr;background:#eef3f9;color:#1e2a4a;border:2px solid #cfdcea;margin:6px 0}
+  button.ok{background:#1f8a5b!important;color:#fff!important;border-color:#1f8a5b!important}
+  button.bad{background:#c53b3b!important;color:#fff!important;border-color:#c53b3b!important}
+  button.done{opacity:.35;pointer-events:none}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .en{direction:ltr;unicode-bidi:isolate}
+  .muted{color:#5a6578;font-size:14px}
+  .tip{background:#fff6e5;padding:10px 12px;border-radius:8px;margin:8px 0;line-height:1.8}
+  .box{background:#f4f8fc;padding:12px;border-radius:10px;margin:8px 0;line-height:1.9}
+  .fb{margin-top:10px;padding:12px;border-radius:8px;background:#fff6e5;line-height:1.8}
+  .bar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+  .pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:13px;margin:2px}
+  .gAAA{background:#e6f4ea;color:#1d5e33}.gABB{background:#e5eefb;color:#1b4f8c}.gABA{background:#fbeee0;color:#8a4a08}.gABC{background:#f3e8fa;color:#5e2a85}
+  .tbl{overflow-x:auto;border:1px solid #d6e1ec;border-radius:10px}
+  table{border-collapse:collapse;width:100%;min-width:560px;font-size:15px}
+  th{background:#1e2a4a;color:#fff;padding:9px;text-align:right}
+  td{padding:8px 9px;border-top:1px solid #e6edf4}
+  td.e{direction:ltr;text-align:left;font-weight:600}
+  .flash{min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#1e2a4a;color:#fff;border-radius:16px;padding:20px;cursor:pointer;text-align:center;margin:10px 0}
+  .flash .w{font-size:40px;font-weight:800;direction:ltr}
+  .mem{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+  .mem button{height:70px;margin:0;direction:ltr;font-size:16px}
+  .mem button.hid{background:#1e2a4a;color:#1e2a4a}
+  .big-word{font-size:34px;font-weight:800;direction:ltr;text-align:center;margin:10px 0}
+  input{font-size:20px;padding:10px;border-radius:8px;border:2px solid #c7d3e0;width:100%;box-sizing:border-box;direction:ltr;text-align:left}
+  .score{font-weight:700;color:#1b5e8c}
+  .wrong{border-bottom:1px solid #eee;padding:8px 0;line-height:1.8}
+</style>
+</head>
+<body>
+<div class="card" id="app"></div>
+<script>
+// ===== الأفعال: [V1, V2, V3, المعنى, شائع في الاختبارات] =====
+const VERBS = [
+["be","was/were","been","يكون",1],["become","became","become","يصبح",1],["begin","began","begun","يبدأ",1],
+["break","broke","broken","يكسر",1],["bring","brought","brought","يجلب",1],["build","built","built","يبني",0],
+["buy","bought","bought","يشتري",1],["catch","caught","caught","يمسك",0],["choose","chose","chosen","يختار",1],
+["come","came","come","يأتي",1],["cost","cost","cost","يكلّف",0],["cut","cut","cut","يقطع",0],
+["do","did","done","يفعل",1],["draw","drew","drawn","يرسم",0],["drink","drank","drunk","يشرب",0],
+["drive","drove","driven","يقود",0],["eat","ate","eaten","يأكل",1],["fall","fell","fallen","يسقط",0],
+["feel","felt","felt","يشعر",0],["fight","fought","fought","يقاتل",0],["find","found","found","يجد",1],
+["fly","flew","flown","يطير",0],["forget","forgot","forgotten","ينسى",1],["get","got","got/gotten","يحصل على",1],
+["give","gave","given","يعطي",1],["go","went","gone","يذهب",1],["grow","grew","grown","ينمو",0],
+["have","had","had","يملك",1],["hear","heard","heard","يسمع",0],["hide","hid","hidden","يختبئ / يخفي",0],
+["hit","hit","hit","يضرب",0],["hold","held","held","يمسك",0],["keep","kept","kept","يحتفظ",0],
+["know","knew","known","يعرف",1],["learn","learned/learnt","learned/learnt","يتعلم",0],["leave","left","left","يغادر",1],
+["let","let","let","يسمح",0],["lose","lost","lost","يفقد",1],["make","made","made","يصنع",1],
+["mean","meant","meant","يعني",0],["meet","met","met","يقابل",1],["pay","paid","paid","يدفع",0],
+["put","put","put","يضع",0],["read","read","read","يقرأ",1],["ride","rode","ridden","يركب",0],
+["run","ran","run","يجري",0],["say","said","said","يقول",1],["see","saw","seen","يرى",1],
+["sell","sold","sold","يبيع",0],["send","sent","sent","يرسل",1],["set","set","set","يضبط",0],
+["shake","shook","shaken","يهز",0],["shine","shone","shone","يلمع",0],["show","showed","shown/showed","يعرض",0],
+["shut","shut","shut","يغلق",0],["sing","sang","sung","يغني",0],["sit","sat","sat","يجلس",0],
+["sleep","slept","slept","ينام",0],["speak","spoke","spoken","يتحدث",1],["spend","spent","spent","ينفق",1],
+["stand","stood","stood","يقف",0],["steal","stole","stolen","يسرق",0],["swim","swam","swum","يسبح",0],
+["take","took","taken","يأخذ",1],["teach","taught","taught","يعلّم",1],["tell","told","told","يخبر",1],
+["think","thought","thought","يفكر",1],["throw","threw","thrown","يرمي",0],["understand","understood","understood","يفهم",0],
+["wake","woke","woken","يستيقظ",0],["wear","wore","worn","يلبس",0],["win","won","won","يفوز",1],
+["write","wrote","written","يكتب",1]
+].map(([v1,v2,v3,ar,c]) => ({v1,v2,v3,ar,c:!!c, a2:v2.split('/'), a3:v3.split('/'), m2:v2.split('/')[0], m3:v3.split('/')[0]}));
+VERBS.forEach(v => { v.g = (v.v1===v.m2 && v.m2===v.m3) ? 'AAA' : (v.m2===v.m3 ? 'ABB' : (v.v1===v.m3 ? 'ABA' : 'ABC')); });
+
+const GROUPS = {
+  AAA:{ar:'ما تتغير أبداً', desc:'V1 = V2 = V3', ex:'cut - cut - cut'},
+  ABB:{ar:'الثاني = الثالث', desc:'V2 = V3', ex:'buy - bought - bought'},
+  ABA:{ar:'الأول = الثالث', desc:'V1 = V3', ex:'come - came - come'},
+  ABC:{ar:'الثلاثة مختلفة', desc:'V1 ≠ V2 ≠ V3', ex:'write - wrote - written'}
+};
+
+const PATTERNS = [
+  {t:'i → a → u', vs:['begin','drink','sing','swim'], n:'الحرف i يصير a في الماضي، و u في الثالث'},
+  {t:'ought / aught', vs:['bring','buy','fight','think','catch','teach'], n:'الثاني والثالث ينتهون بـ ought أو aught'},
+  {t:'ew → own', vs:['fly','grow','know','throw','draw','show'], n:'الماضي فيه ew، والثالث ينتهي بـ wn'},
+  {t:'o → o + en', vs:['break','choose','speak','steal','wake','forget'], n:'الماضي فيه o، والثالث = الماضي + en'},
+  {t:'i → o → i + en', vs:['drive','ride','write'], n:'drive - drove - driven'},
+  {t:'ay → aid', vs:['pay','say'], n:'pay - paid، say - said'},
+  {t:'d → t', vs:['build','send','spend'], n:'الـ d في الآخر تصير t'},
+  {t:'ee / ea → e + t', vs:['keep','sleep','feel','mean','meet','leave'], n:'الصوت الطويل يقصر ويجي t في الآخر'}
+];
+
+const TRAPS = [
+  ['bought','brought','bought من buy (يشتري)، و brought من bring (يجلب)'],
+  ['went','gone','went للماضي البسيط (I went)، و gone بعد have (I have gone)'],
+  ['saw','seen','saw للماضي، و seen بعد have / was (I have seen، it was seen)'],
+  ['did','done','did للماضي، و done بعد have (I have done)'],
+  ['ate','eaten','I ate (ماضي)، I have eaten (تام)'],
+  ['began','begun','It began (ماضي)، It has begun (تام)'],
+  ['drank / swam / sang','drunk / swum / sung','نفس نمط begin: a للماضي، و u للثالث'],
+  ['came / ran / became','come / run / become','الثالث يرجع مثل الأول: I have come'],
+  ['fell','felt','fell من fall (يسقط)، و felt من feel (يشعر)'],
+  ['left','lived','left من leave (يغادر)، و lived من live (يعيش)، وهو فعل منتظم'],
+  ['read','read','نفس الكتابة، بس تُنطق "رِد" في الماضي والثالث'],
+  ['won','one','won (فاز) تُنطق مثل one (واحد)']
+];
+
+const USAGE = [
+ ["I ___ to Muscat last week.","went",["gone","go","goes"],"last week = ماضي بسيط، فنستخدم V2"],
+ ["She has ___ to the bank.","gone",["went","go","going"],"بعد has نستخدم V3"],
+ ["Have you ever ___ a camel?","ridden",["rode","ride","riding"],"Have ... ever + V3"],
+ ["They ___ the match yesterday.","won",["win","wins","winned"],"yesterday = ماضي، و V2 لـ win هو won"],
+ ["The window was ___ by the children.","broken",["broke","break","breaked"],"المبني للمجهول: was + V3"],
+ ["I have already ___ my lunch.","eaten",["ate","eat","eated"],"already مع have + V3"],
+ ["He ___ me a gift for my birthday.","gave",["given","give","gived"],"ماضي بسيط في الإثبات: V2"],
+ ["The letter was ___ in English.","written",["wrote","write","writed"],"was + V3 (مبني للمجهول)"],
+ ["Did you ___ the email?","send",["sent","sended","sending"],"بعد did نرجع للـ V1"],
+ ["She didn't ___ the answer.","know",["knew","known","knows"],"بعد didn't نستخدم V1"],
+ ["We had ___ the film before.","seen",["saw","see","seeing"],"had + V3 (ماضي تام)"],
+ ["English is ___ in many countries.","spoken",["spoke","speak","speaking"],"is + V3 (مبني للمجهول)"],
+ ["I ___ my keys yesterday, but I found them later.","lost",["lose","losed","loses"],"ماضي بسيط: V2"],
+ ["How much did it ___?","cost",["costed","costs","costing"],"بعد did: V1، و cost ما يتغير أصلاً"],
+ ["He has ___ three books.","written",["wrote","write","writes"],"has + V3"],
+ ["I ___ him at the party last night.","met",["meet","meeted","meets"],"last night = ماضي: V2"],
+ ["The lesson has already ___.","begun",["began","begin","begins"],"has + V3"],
+ ["She ___ a beautiful song at the wedding.","sang",["sung","sing","singed"],"ماضي بسيط: V2 = sang"],
+ ["They have ___ in the sea many times.","swum",["swam","swim","swimmed"],"have + V3 = swum"],
+ ["I have never ___ in a plane.","flown",["flew","fly","flied"],"have never + V3"],
+ ["My phone was ___ from my bag.","stolen",["stole","steal","stealed"],"was + V3"],
+ ["He ___ the ball to his friend.","threw",["thrown","throw","throwed"],"ماضي بسيط: V2"],
+ ["I have ___ his name.","forgotten",["forget","forgetted","forgets"],"have + V3"],
+ ["She ___ a new dress yesterday.","bought",["brought","buyed","buy"],"من buy (يشتري)، مو bring"],
+ ["Can you ___ me your notes?","bring",["brought","brings","bringing"],"بعد can: V1"],
+ ["The house was ___ in 1990.","built",["build","builded","building"],"was + V3"],
+ ["He has ___ a doctor.","become",["became","becomed","becomes"],"has + V3، و V3 لـ become هو become"],
+ ["I ___ well last night.","slept",["sleeped","sleep","sleeps"],"ماضي: V2 = slept"],
+ ["Our teacher ___ us a story yesterday.","told",["telled","tell","tells"],"ماضي: V2 = told"],
+ ["What have you ___ with my book?","done",["did","do","doing"],"have + V3 = done"],
+ ["Who ___ this picture?","drew",["drawn","draw","drawed"],"سؤال عن الماضي بدون did: V2"],
+ ["She has ___ a lot of water today.","drunk",["drank","drink","drinked"],"has + V3 = drunk"],
+ ["The money was ___ on clothes.","spent",["spend","spended","spending"],"was + V3"],
+ ["He ___ up at 6 this morning.","woke",["woken","wake","waked"],"ماضي: V2 = woke"],
+ ["I have ___ this jacket many times.","worn",["wore","wear","weared"],"have + V3 = worn"],
+ ["The thief was ___ by the police.","caught",["catched","catch","catching"],"was + V3"],
+ ["She ___ the job last month.","left",["leaved","leave","leaves"],"ماضي: V2 = left"],
+ ["I want to ___ a new car.","buy",["bought","buys","buying"],"بعد to: V1"],
+ ["They will ___ tomorrow.","come",["came","comes","coming"],"بعد will: V1"],
+ ["By 5 pm, she will have ___ the report.","sent",["send","sended","sends"],"will have + V3"]
+];
+
+// ===== أدوات =====
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const pickN = (a,n) => shuffle(a).slice(0,n);
+const regular = v => v.endsWith('e') ? v+'d' : (/[^aeiou]y$/.test(v) ? v.slice(0,-1)+'ied' : v+'ed');
+const norm = s => String(s).trim().toLowerCase().replace(/\s+/g,' ');
+const FORM = {1:'الأساسي (V1)',2:'الثاني (V2)',3:'الثالث (V3)'};
+const formOf = (v,k) => k===1 ? v.v1 : (k===2 ? v.m2 : v.m3);
+const altsOf = (v,k) => k===1 ? [v.v1] : (k===2 ? v.a2 : v.a3);
+function pool(){ return state.commonOnly ? VERBS.filter(v=>v.c) : VERBS; }
+function say(w){ try{ const u=new SpeechSynthesisUtterance(w); u.lang='en-US'; u.rate=0.85; speechSynthesis.cancel(); speechSynthesis.speak(u);}catch(e){} }
+function distract(v,k){
+  const good = altsOf(v,k).map(norm);
+  const c = shuffle([v.v1, v.m2, v.m3, regular(v.v1), v.v1+'ed', formOf(pick(VERBS),k), formOf(pick(VERBS),k), formOf(pick(VERBS),k)]);
+  const out=[]; c.forEach(x=>{ if(!good.includes(norm(x)) && !out.includes(x)) out.push(x); });
+  return out.slice(0,3);
+}
+function mcqForm(v,k,prompt){ return {p:prompt, o:shuffle([formOf(v,k),...distract(v,k)]), a:formOf(v,k), e:`${v.v1} - ${v.v2} - ${v.v3} (${v.ar})`, verb:v}; }
+
+// ===== الألعاب =====
+const GAMES = [
+ {id:'flash', t:'بطاقات الحفظ', d:'اقلبي البطاقة وشوفي التصريفات والمعنى', special:true},
+ {id:'v2', t:'اختاري التصريف الثاني', d:'اختيار من متعدد', gen(){const v=pick(pool()); return mcqForm(v,2,`ما التصريف الثاني (V2) للفعل <b class="en">${v.v1}</b>؟`);}},
+ {id:'v3', t:'اختاري التصريف الثالث', d:'اختيار من متعدد', gen(){const v=pick(pool()); return mcqForm(v,3,`ما التصريف الثالث (V3) للفعل <b class="en">${v.v1}</b>؟`);}},
+ {id:'mean', t:'وش معناه؟', d:'من الإنجليزي للعربي', gen(){const v=pick(pool()); const o=shuffle([v.ar,...pickN(VERBS.filter(x=>x.ar!==v.ar),3).map(x=>x.ar)]); return {p:`معنى الفعل <b class="en">${v.v1}</b>:`, o, a:v.ar, e:`${v.v1} = ${v.ar}`, rtlOpts:true};}},
+ {id:'ar', t:'من المعنى للفعل', d:'من العربي للإنجليزي', gen(){const v=pick(pool()); const o=shuffle([v.v1,...pickN(VERBS.filter(x=>x!==v),3).map(x=>x.v1)]); return {p:`أي فعل معناه <b>${v.ar}</b>؟`, o, a:v.v1, e:`${v.ar} = ${v.v1} - ${v.v2} - ${v.v3}`};}},
+ {id:'t2', t:'اكتبي التصريف الثاني', d:'كتابة', gen(){const v=pick(pool()); return {p:`اكتبي التصريف الثاني (V2) للفعل <b class="en">${v.v1}</b> (${v.ar})`, type:true, alts:v.a2, a:v.m2, e:`${v.v1} - ${v.v2} - ${v.v3}`};}},
+ {id:'t3', t:'اكتبي التصريف الثالث', d:'كتابة', gen(){const v=pick(pool()); return {p:`اكتبي التصريف الثالث (V3) للفعل <b class="en">${v.v1}</b> (${v.ar})`, type:true, alts:v.a3, a:v.m3, e:`${v.v1} - ${v.v2} - ${v.v3}`};}},
+ {id:'both', t:'أكملي الجدول', d:'اكتبي الثاني والثالث مع بعض', gen(){const v=pick(pool()); return {p:`اكتبي V2 و V3 للفعل <b class="en">${v.v1}</b> (${v.ar})، وبينهم مسافة. مثال: <span class="en">went gone</span>`, type:true, both:v, a:`${v.m2} ${v.m3}`, e:`${v.v1} - ${v.v2} - ${v.v3}`};}},
+ {id:'tf', t:'صح أو خطأ', d:'هل التصريف صحيح؟', gen(){const v=pick(pool()); const k=pick([2,3]); const right=Math.random()<.5; const shown= right? formOf(v,k) : pick(distract(v,k)); return {p:`<span class="en">${v.v1}</span> ← التصريف ${FORM[k]}: <b class="en">${shown}</b>`, o:['صح','خطأ'], a: right?'صح':'خطأ', e:`الصحيح: ${v.v1} - ${v.v2} - ${v.v3}`, rtlOpts:true};}},
+ {id:'group', t:'صنّفي الفعل', d:'لأي مجموعة ينتمي؟', gen(){const v=pick(pool()); const lbl=g=>`${GROUPS[g].ar} (\u2066${GROUPS[g].desc}\u2069)`; const o=Object.keys(GROUPS).map(lbl); return {p:`لأي مجموعة ينتمي الفعل <b class="en">${v.v1} - ${v.v2} - ${v.v3}</b>؟`, o, a:lbl(v.g), e:`مثال للمجموعة: ${GROUPS[v.g].ex}`, rtlOpts:true};}},
+ {id:'match', t:'لعبة التوصيل', d:'وصّلي الفعل بتصريفه الثالث', special:true},
+ {id:'scramble', t:'الحروف المبعثرة', d:'رتبي الحروف واكتبي الكلمة', gen(){const v=pick(pool().filter(x=>x.m3.length>3||x.m2.length>3)); const k=v.m3.length>3?pick([2,3]):2; const w=formOf(v,k); let s=w; for(let i=0;i<6&&s===w;i++) s=shuffle(w.split('')).join(''); return {p:`رتبي الحروف: <b class="en" style="letter-spacing:6px">${s.toUpperCase()}</b><br><span class="muted">التصريف ${FORM[k]} للفعل ${v.v1} (${v.ar})</span>`, type:true, alts:altsOf(v,k), a:w, e:`${v.v1} - ${v.v2} - ${v.v3}`};}},
+ {id:'memory', t:'لعبة الذاكرة', d:'طابقي الفعل مع تصريفه الثاني', special:true},
+ {id:'odd', t:'الفعل المختلف', d:'أي فعل يختلف نمط تصريفه؟', gen(){const gs=Object.keys(GROUPS); const g=pick(['ABB','ABC','AAA']); const same=pickN(VERBS.filter(x=>x.g===g),3); const other=pick(VERBS.filter(x=>x.g!==g)); const o=shuffle([...same,other]).map(x=>`${x.v1} - ${x.m2} - ${x.m3}`); return {p:'أي فعل نمط تصريفه مختلف عن الباقي؟', o, a:`${other.v1} - ${other.m2} - ${other.m3}`, e:`الثلاثة الباقية من مجموعة "${GROUPS[g].ar}"، و ${other.v1} من مجموعة "${GROUPS[other.g].ar}"`};}},
+ {id:'sent', t:'التصريف في الجملة', d:'أكملي الجملة بالتصريف الصح', gen(){const u=pick(USAGE); return {p:`<span class="en">${esc(u[0])}</span>`, o:shuffle([u[1],...u[2]]), a:u[1], e:u[3]};}},
+ {id:'fix', t:'أي جملة صحيحة؟', d:'اكتشفي الخطأ', gen(){const v=pick(VERBS.filter(x=>x.m2!==x.m3)); const t=pick([0,1]); if(t===0) return {p:'أي جملة صحيحة؟', o:shuffle([`I have ${v.m3}.`,`I have ${v.m2}.`]), a:`I have ${v.m3}.`, e:`بعد have نستخدم V3: ${v.m3}`}; return {p:'أي جملة صحيحة؟', o:shuffle([`Yesterday, I ${v.m2}.`,`Yesterday, I ${v.m3}.`]), a:`Yesterday, I ${v.m2}.`, e:`yesterday = ماضي بسيط: V2 = ${v.m2}`};}},
+ {id:'speed', t:'سباق 60 ثانية', d:'أكبر عدد إجابات صحيحة في دقيقة', timed:60, gen(){const v=pick(pool()); const k=pick([2,3]); return mcqForm(v,k,`التصريف ${FORM[k]} لـ <b class="en">${v.v1}</b>؟`);}},
+ {id:'survive', t:'تحدي الأرواح الثلاث', d:'كم سؤال تقدرين تجاوبين قبل ما تخلص أرواحك؟', lives:3, gen(){const v=pick(pool()); const k=pick([2,3]); return mcqForm(v,k,`التصريف ${FORM[k]} لـ <b class="en">${v.v1}</b>؟`);}},
+ {id:'listen', t:'اسمعي واختاري', d:'اسمعي الكلمة واختاري كتابتها', gen(){const v=pick(pool()); const k=pick([1,2,3]); const w=formOf(v,k); const o=[w]; while(o.length<4){const x=formOf(pick(VERBS),pick([1,2,3])); if(!o.includes(x)) o.push(x);} return {p:'اضغطي زر الصوت، واختاري الكلمة اللي سمعتيها', speak:w, o:shuffle(o), a:w, e:`${w}: من الفعل ${v.v1} (${v.ar})`};}},
+ {id:'order', t:'رتبي التصريفات', d:'اضغطي V1 ثم V2 ثم V3', special:true}
+];
+
+// ===== الحالة =====
+const state = {view:'home', commonOnly:false};
+
+function go(view){ clearInterval(state.tid); state.view=view; render(); }
+
+function render(){
+  const app=$('app'); const v=state.view;
+  if(v==='home') app.innerHTML = homeHtml();
+  else if(v==='learn') app.innerHTML = learnHtml();
+  else if(v==='table') app.innerHTML = tableHtml();
+  else if(v==='common') app.innerHTML = commonHtml();
+  else if(v==='games') app.innerHTML = gamesHtml();
+  else if(v==='play') renderPlay();
+  else if(v==='quiz') renderQuiz();
+  window.scrollTo(0,0);
+}
+
+function homeHtml(){
+  return `<h1>الأفعال الشاذة (Irregular Verbs)</h1>
+  <p class="muted">${VERBS.length} فعل، مع الشرح، و20 لعبة، واختبار على التصريفات واستخداماتها.</p>
+  <button class="big" onclick="go('learn')">1. الشرح: متى أستخدم كل تصريف، ووش اللي ما يتغير</button>
+  <button class="big" onclick="go('table')">2. جدول الأفعال كامل (مع النطق)</button>
+  <button class="big" onclick="go('common')">3. الأفعال الشائعة في الاختبارات والفخاخ</button>
+  <button class="big" onclick="go('games')">4. الألعاب (20 لعبة)</button>
+  <button class="big" onclick="startQuiz()">5. الاختبار الشامل (30 سؤال)</button>
+  <label class="box" style="display:flex;gap:10px;align-items:center"><input type="checkbox" style="width:22px;height:22px" ${state.commonOnly?'checked':''} onchange="state.commonOnly=this.checked"> الألعاب على الأفعال الشائعة في الاختبارات بس (${VERBS.filter(v=>v.c).length} فعل)</label>`;
+}
+
+function verbList(vs){ return vs.map(v=>`<span class="pill g${v.g} en">${v.v1}-${v.m2}-${v.m3}</span>`).join(' '); }
+
+function learnHtml(){
+  const by=g=>VERBS.filter(v=>v.g===g);
+  return `<button class="sec" onclick="go('home')">الرئيسية</button>
+  <h1>الشرح</h1>
+  <h3>كل فعل له 3 صور</h3>
+  <div class="box"><b class="en">V1</b> الفعل الأساسي (go)<br><b class="en">V2</b> التصريف الثاني، للماضي البسيط (went)<br><b class="en">V3</b> التصريف الثالث، Past Participle (gone)</div>
+  <p>الأفعال المنتظمة نضيف لها <span class="en">ed</span> في الثاني والثالث (play - played - played). أما الأفعال الشاذة فتتغير بطريقتها، وعشان كذا نحفظها.</p>
+
+  <h3>متى أستخدم كل تصريف؟</h3>
+  <div class="box"><b>V1 بعد:</b>
+  <ul>
+  <li>المضارع البسيط: <span class="en">I go / She goes</span></li>
+  <li>do / does / did / didn't: <span class="en">Did you go? / I didn't go</span></li>
+  <li>will والأفعال الناقصة: <span class="en">will go, can go, must go</span></li>
+  <li>to: <span class="en">I want to go</span></li>
+  <li>الأمر: <span class="en">Go home!</span></li>
+  </ul></div>
+  <div class="box"><b>V2:</b> الماضي البسيط في الجملة المثبتة فقط: <span class="en">I went yesterday.</span><br>مع النفي والسؤال نرجع لـ V1: <span class="en">I didn't go. / Did you go?</span></div>
+  <div class="box"><b>V3 بعد:</b>
+  <ul>
+  <li>have / has (المضارع التام): <span class="en">I have gone</span></li>
+  <li>had (الماضي التام): <span class="en">I had gone</span></li>
+  <li>will have (المستقبل التام): <span class="en">I will have gone</span></li>
+  <li>be في المبني للمجهول: <span class="en">It was written / It is spoken</span></li>
+  </ul></div>
+  <div class="tip">قاعدة سريعة: شفتي have أو has أو had أو was أو is قبل الفراغ؟ غالباً الجواب V3. شفتي yesterday أو ago أو last بدون did؟ الجواب V2.</div>
+
+  <h3>وش اللي ما يتغير في الأفعال؟</h3>
+  <ol>
+  <li><b>V2 و V3 نفس الشكل مع كل الضمائر:</b> <span class="en">I went, she went, they went</span>. الاستثناء الوحيد be: <span class="en">I / he / she / it was</span> و <span class="en">you / we / they were</span>.</li>
+  <li><b>ما نضيف s للماضي ولا للثالث:</b> <span class="en">She went</span> (مو wents).</li>
+  <li><b>بعد did و didn't و will و can و to، الفعل يرجع V1 دايماً:</b> <span class="en">She didn't go</span> (مو didn't went).</li>
+  <li><b>أفعال ما تتغير أبداً</b>، الثلاث صور نفس الشكل: ${verbList(by('AAA'))}<br><span class="muted">read تنكتب نفس الشي، بس تنطق "رِد" في الثاني والثالث.</span></li>
+  </ol>
+
+  <h3>المجموعات الأربع</h3>
+  ${Object.keys(GROUPS).map(g=>`<div class="box"><span class="pill g${g}">${GROUPS[g].ar}</span> <b class="en">${GROUPS[g].desc}</b> (${by(g).length} فعل)<br>${verbList(by(g))}</div>`).join('')}
+
+  <h3>أنماط تسهّل الحفظ</h3>
+  ${PATTERNS.map(p=>`<div class="box"><b class="en">${p.t}</b>: ${p.n}<br>${verbList(p.vs.map(n=>VERBS.find(v=>v.v1===n)))}</div>`).join('')}
+  <button onclick="go('games')">جرّبي الألعاب</button>`;
+}
+
+function tableHtml(){
+  return `<button class="sec" onclick="go('home')">الرئيسية</button>
+  <h1>جدول الأفعال</h1>
+  <p class="muted">اضغطي على أي فعل عشان تسمعين نطقه. الألوان تبين المجموعة، والنجمة ★ للأفعال الشائعة في الاختبارات.</p>
+  <div>${Object.keys(GROUPS).map(g=>`<span class="pill g${g}">${GROUPS[g].ar}</span>`).join(' ')}</div>
+  <div class="tbl"><table><thead><tr><th>V1</th><th>V2</th><th>V3</th><th>المعنى</th><th>المجموعة</th></tr></thead><tbody>
+  ${VERBS.map(v=>`<tr><td class="e"><a href="#" onclick="say('${v.v1}');return false">${v.c?'★ ':''}${v.v1}</a></td><td class="e"><a href="#" onclick="say('${v.m2}');return false">${v.v2}</a></td><td class="e"><a href="#" onclick="say('${v.m3}');return false">${v.v3}</a></td><td>${v.ar}</td><td><span class="pill g${v.g}">${GROUPS[v.g].ar}</span></td></tr>`).join('')}
+  </tbody></table></div>`;
+}
+
+function commonHtml(){
+  const cs=VERBS.filter(v=>v.c);
+  return `<button class="sec" onclick="go('home')">الرئيسية</button>
+  <h1>الأفعال الشائعة في الاختبارات</h1>
+  <p>هذي الأفعال (${cs.length} فعل) تتكرر كثير في أسئلة القواعد. اخترتها لأنها من أكثر الأفعال استخداماً في الإنجليزي، فابدئي بحفظها أول.</p>
+  <div class="box">${verbList(cs)}</div>
+  <h3>كيف تجي في الاختبار؟</h3>
+  <ul>
+  <li>اختيار V2 أو V3 حسب الزمن: <span class="en">She has (went / gone)</span></li>
+  <li>V1 بعد did و didn't: <span class="en">Did you (saw / see)?</span></li>
+  <li>V3 في المبني للمجهول: <span class="en">The house was (built / build)</span></li>
+  <li>التفريق بين فعلين متشابهين: <span class="en">bought / brought</span></li>
+  </ul>
+  <h3>الفخاخ اللي تتكرر</h3>
+  <div class="tbl"><table><thead><tr><th>هذا</th><th>أو هذا؟</th><th>الفرق</th></tr></thead><tbody>
+  ${TRAPS.map(t=>`<tr><td class="e">${t[0]}</td><td class="e">${t[1]}</td><td>${t[2]}</td></tr>`).join('')}
+  </tbody></table></div>
+  <button onclick="state.commonOnly=true;go('games')">العبي على الأفعال الشائعة بس</button>`;
+}
+
+function gamesHtml(){
+  return `<button class="sec" onclick="go('home')">الرئيسية</button>
+  <h1>الألعاب</h1>
+  <p class="muted">${state.commonOnly?'الألعاب الحين على الأفعال الشائعة بس.':'الألعاب على كل الأفعال.'} <a href="#" onclick="state.commonOnly=!state.commonOnly;render();return false">${state.commonOnly?'العبي على كل الأفعال':'العبي على الشائعة بس'}</a></p>
+  ${GAMES.map((g,i)=>`<button class="big sec" onclick="startGame(${i})">${i+1}. ${g.t}<br><span class="muted">${g.d}</span></button>`).join('')}`;
+}
+
+// ===== تشغيل لعبة =====
+function startGame(i){
+  clearInterval(state.tid);
+  const g=GAMES[i]; state.g=g; state.gi=i; state.view='play'; state.score=0; state.n=0; state.lives=g.lives||0; state.answered=false;
+  if(g.id==='flash'){ state.deck=shuffle(pool()); state.flip=false; state.known=0; }
+  else if(g.id==='match') newMatch();
+  else if(g.id==='memory') newMemory();
+  else if(g.id==='order') newOrder();
+  else { state.total = g.timed||g.lives ? Infinity : 10; nextQ(); }
+  if(g.timed){ state.left=g.timed; state.tid=setInterval(()=>{ state.left--; const el=$('tm'); if(el) el.textContent=state.left; if(state.left<=0){ clearInterval(state.tid); state.over=true; render(); } },1000); }
+  state.over=false;
+  render();
+}
+function nextQ(){ state.q=state.g.gen(); state.answered=false; state.given=null; if(state.q.speak) setTimeout(()=>say(state.q.speak),300); }
+
+function check(q,given){
+  if(q.both){ const p=norm(given).split(/[\s,\-]+/); return p.length>=2 && q.both.a2.map(norm).includes(p[0]) && q.both.a3.map(norm).includes(p[1]); }
+  if(q.type) return q.alts.map(norm).includes(norm(given));
+  return given===q.a;
+}
+
+function answer(given){
+  if(state.answered||state.over) return;
+  const q=state.q; const ok=check(q,given);
+  state.given=given; state.answered=true; state.n++;
+  if(ok) state.score++; else if(state.g.lives){ state.lives--; if(state.lives<=0) state.over=true; }
+  if(state.g.timed && !state.over){ setTimeout(()=>{ if(!state.over){ nextQ(); render(); } }, ok?350:900); }
+  render();
+}
+function typed(){ const v=$('inp').value; if(v.trim()) answer(v); }
+function next(){ if(state.n>=state.total){ state.over=true; render(); return; } nextQ(); render(); }
+
+function headerHtml(extra=''){
+  const g=state.g;
+  return `<div class="bar"><button class="sec" onclick="go('games')">الألعاب</button><b>${state.gi+1}. ${g.t}</b>${extra}</div>`;
+}
+
+function renderPlay(){
+  const g=state.g, app=$('app');
+  if(g.id==='flash') return app.innerHTML=flashHtml();
+  if(g.id==='match') return app.innerHTML=matchHtml();
+  if(g.id==='memory') return app.innerHTML=memoryHtml();
+  if(g.id==='order') return app.innerHTML=orderHtml();
+  let info = g.timed ? ` <span class="score">الوقت: <span id="tm">${state.left}</span> | النقاط: ${state.score}</span>` : g.lives ? ` <span class="score">الأرواح: ${'♥'.repeat(Math.max(state.lives,0))} | النقاط: ${state.score}</span>` : ` <span class="score">${Math.min(state.n+(state.answered?0:1),state.total)} / ${state.total} | ${state.score}</span>`;
+  if(state.over){
+    const msg = g.timed ? `جاوبتي صح على ${state.score} سؤال في ${g.timed} ثانية.` : g.lives ? `خلصت الأرواح! جاوبتي صح على ${state.score} سؤال.` : `النتيجة: ${state.score} من ${state.total}.`;
+    return app.innerHTML = headerHtml() + `<h2>${msg}</h2><button onclick="startGame(${state.gi})">العبي مرة ثانية</button><button class="sec" onclick="go('games')">لعبة ثانية</button>`;
+  }
+  const q=state.q; let h=headerHtml(info)+`<h2 style="line-height:1.8">${q.p}</h2>`;
+  if(q.speak) h+=`<button onclick="say('${q.speak}')">🔊 اسمعي الكلمة</button>`;
+  if(q.type){
+    h+=`<input id="inp" autocomplete="off" autocapitalize="off" spellcheck="false" ${state.answered?'disabled':''} value="${state.answered?esc(state.given):''}" onkeydown="if(event.key==='Enter')typed()">`;
+    if(!state.answered) h+=`<button onclick="typed()">تحقق</button>`;
+  } else {
+    h+=`<div class="${q.o.length===2?'grid':''}">`+q.o.map(o=>{ let c=''; if(state.answered){ if(o===q.a) c=' ok'; else if(o===state.given) c=' bad'; } return `<button class="opt${c}" style="${q.rtlOpts?'direction:rtl;text-align:right':''}" onclick='answer(${JSON.stringify(o)})'>${esc(o)}</button>`; }).join('')+`</div>`;
+  }
+  if(state.answered && !g.timed){
+    const ok=check(q,state.given);
+    h+=`<div class="fb"><b>${ok?'صح!':'غلط. الجواب: <span class="en">'+esc(q.a)+'</span>'}</b><br>${q.e}</div>`;
+    if(!state.over) h+=`<button onclick="next()">${state.n>=state.total?'النتيجة':'التالي'}</button>`;
+  } else if(state.answered && g.timed){
+    h+=`<div class="fb">${check(q,state.given)?'صح!':'الجواب: <span class="en">'+esc(q.a)+'</span>'}</div>`;
+  }
+  app.innerHTML=h;
+  if(q.type && !state.answered) setTimeout(()=>{ const i=$('inp'); if(i) i.focus(); },50);
+}
+
+// بطاقات
+function flashHtml(){
+  const d=state.deck;
+  if(!d.length) return headerHtml()+`<h2>خلصتي البطاقات! عرفتي ${state.known} فعل من أول مرة.</h2><button onclick="startGame(0)">من جديد</button>`;
+  const v=d[0];
+  return headerHtml(` <span class="score">باقي ${d.length}</span>`)+`<div class="flash" onclick="state.flip=!state.flip;render()">
+    ${state.flip?`<div class="w">${v.v1} - ${v.v2} - ${v.v3}</div><div style="font-size:22px;margin-top:10px">${v.ar}</div><div style="margin-top:8px"><span class="pill g${v.g}">${GROUPS[v.g].ar}</span></div>`:`<div class="w">${v.v1}</div><div class="muted" style="color:#c9d4e6;margin-top:8px">فكّري في V2 و V3، ثم اضغطي لقلب البطاقة</div>`}
+  </div>
+  <button class="sec" onclick="say('${v.v1}. ${v.m2}. ${v.m3}')">🔊 النطق</button>
+  ${state.flip?`<div class="grid"><button onclick="state.known++;state.deck.shift();state.flip=false;render()">عرفته</button><button class="sec" onclick="state.deck.push(state.deck.shift());state.flip=false;render()">ما عرفته، رجّعيه لي</button></div>`:''}`;
+}
+
+// توصيل
+function newMatch(){ const vs=pickN(pool().filter(v=>v.v1!==v.m3),5); state.mv=vs; state.right=shuffle(vs); state.sel=null; state.matched=[]; state.wrongFlash=null; state.tries=0; }
+function matchHtml(){
+  if(state.matched.length===state.mv.length) return headerHtml()+`<h2>ممتاز! وصّلتي كل الأفعال في ${state.tries} محاولة.</h2><button onclick="startGame(${state.gi})">جولة ثانية</button>`;
+  return headerHtml()+`<p>اضغطي الفعل من اليمين، ثم تصريفه الثالث من اليسار.</p><div class="grid">
+   <div>${state.mv.map((v,i)=>`<button class="opt ${state.matched.includes(v.v1)?'done':''} ${state.sel===i?'ok':''}" onclick="state.sel=${i};render()">${v.v1} <span class="muted">(${v.ar})</span></button>`).join('')}</div>
+   <div>${state.right.map(v=>`<button class="opt ${state.matched.includes(v.v1)?'done':''} ${state.wrongFlash===v.v1?'bad':''}" onclick="matchPick('${v.v1}')">${v.m3}</button>`).join('')}</div></div>`;
+}
+function matchPick(v1){
+  if(state.sel===null) return;
+  state.tries++; const left=state.mv[state.sel];
+  if(left.v1===v1){ state.matched.push(v1); state.sel=null; state.wrongFlash=null; }
+  else { state.wrongFlash=v1; setTimeout(()=>{ state.wrongFlash=null; render(); },600); }
+  render();
+}
+
+// ذاكرة
+function newMemory(){ const vs=pickN(pool().filter(v=>v.v1!==v.m2),6); state.cards=shuffle(vs.flatMap(v=>[{id:v.v1,t:v.v1},{id:v.v1,t:v.m2}])); state.open=[]; state.got=[]; state.moves=0; }
+function memoryHtml(){
+  if(state.got.length===state.cards.length/2) return headerHtml()+`<h2>خلصتي في ${state.moves} محاولة!</h2><button onclick="startGame(${state.gi})">جولة ثانية</button>`;
+  return headerHtml(` <span class="score">المحاولات: ${state.moves}</span>`)+`<p>اقلبي بطاقتين: الفعل الأساسي وتصريفه الثاني.</p><div class="mem">${state.cards.map((c,i)=>{ const show=state.open.includes(i)||state.got.includes(c.id); return `<button class="${show?(state.got.includes(c.id)?'ok':''):'hid'}" onclick="memFlip(${i})">${show?c.t:'?'}</button>`; }).join('')}</div>`;
+}
+function memFlip(i){
+  if(state.open.length>=2||state.open.includes(i)||state.got.includes(state.cards[i].id)) return;
+  state.open.push(i);
+  if(state.open.length===2){ state.moves++; const [a,b]=state.open.map(k=>state.cards[k]);
+    if(a.id===b.id){ state.got.push(a.id); state.open=[]; } else setTimeout(()=>{ state.open=[]; render(); },900); }
+  render();
+}
+
+// ترتيب
+function newOrder(){ state.ov=pick(pool().filter(v=>v.g!=='AAA')); state.ob=shuffle([state.ov.v1,state.ov.m2,state.ov.m3].map((t,i)=>({t,i}))); state.seq=[]; state.ores=null; state.oround=(state.oround||0); }
+function orderHtml(){
+  const v=state.ov; const want=[v.v1,v.m2,v.m3];
+  let h=headerHtml(` <span class="score">${state.score} صح</span>`)+`<h2>رتبي تصريفات الفعل (${v.ar}): اضغطي V1 ثم V2 ثم V3</h2>
+  <div class="big-word">${state.seq.map(i=>state.ob[i].t).join(' - ')||'...'}</div>
+  <div class="grid3">${state.ob.map((b,i)=>`<button class="opt ${state.seq.includes(i)?'done':''}" onclick="orderPick(${i})">${b.t}</button>`).join('')}</div>`;
+  if(state.ores!==null) h+=`<div class="fb"><b>${state.ores?'صح!':'غلط.'}</b> الترتيب: <span class="en">${want.join(' - ')}</span></div><button onclick="newOrder();render()">التالي</button>`;
+  else if(state.seq.length) h+=`<button class="sec" onclick="state.seq=[];render()">ابدئي من جديد</button>`;
+  return h;
+}
+function orderPick(i){
+  if(state.ores!==null||state.seq.includes(i)) return;
+  state.seq.push(i);
+  if(state.seq.length===3){ const v=state.ov; const got=state.seq.map(k=>state.ob[k].t); state.ores = got.join()===[v.v1,v.m2,v.m3].join(); if(state.ores) state.score++; }
+  render();
+}
+
+// ===== الاختبار الشامل =====
+function startQuiz(){
+  clearInterval(state.tid);
+  const usage=pickN(USAGE,15).map(u=>({p:`<span class="en">${esc(u[0])}</span>`, o:shuffle([u[1],...u[2]]), a:u[1], e:u[3], kind:'الاستخدام'}));
+  const forms=pickN(VERBS,15).map(v=>{ const k=pick([2,3]); return {...mcqForm(v,k,`التصريف ${FORM[k]} للفعل <b class="en">${v.v1}</b>؟`), kind:'التصريف'}; });
+  state.qz=shuffle([...usage,...forms]); state.qi=0; state.qa={}; state.view='quiz'; state.qdone=false; render();
+}
+function renderQuiz(){
+  const app=$('app');
+  if(state.qdone){
+    let s=0; const wrong=[]; state.qz.forEach((q,i)=>{ if(state.qa[i]===q.a) s++; else wrong.push(i); });
+    const by=k=>{ const it=state.qz.map((q,i)=>[q,i]).filter(([q])=>q.kind===k); return `${it.filter(([q,i])=>state.qa[i]===q.a).length} / ${it.length}`; };
+    return app.innerHTML=`<button class="sec" onclick="go('home')">الرئيسية</button><h1>النتيجة: ${s} من ${state.qz.length} (${Math.round(s/state.qz.length*100)}%)</h1>
+    <div class="box">أسئلة التصريف: ${by('التصريف')}<br>أسئلة الاستخدام في الجملة: ${by('الاستخدام')}</div>
+    <h2>الأخطاء والشرح</h2>${wrong.length?wrong.map(i=>{const q=state.qz[i]; return `<div class="wrong"><b>${i+1}.</b> ${q.p}<br>إجابتك: <span class="en">${state.qa[i]===undefined?'—':esc(state.qa[i])}</span><br>الصحيح: <b class="en">${esc(q.a)}</b><br><span class="muted">${q.e}</span></div>`;}).join(''):'<p>ممتاز! ولا غلطة.</p>'}
+    <button onclick="startQuiz()">اختبار جديد</button>`;
+  }
+  const q=state.qz[state.qi];
+  app.innerHTML=`<div class="bar"><button class="sec" onclick="go('home')">الرئيسية</button><span class="score">السؤال ${state.qi+1} من ${state.qz.length} | ${q.kind}</span></div>
+  <h2 style="line-height:1.8">${q.p}</h2>
+  ${q.o.map(o=>`<button class="opt ${state.qa[state.qi]===o?'ok':''}" onclick='state.qa[state.qi]=${JSON.stringify(o)};render()'>${esc(o)}</button>`).join('')}
+  <div style="margin-top:10px"><button class="sec" onclick="if(state.qi>0){state.qi--;render()}">السابق</button>
+  ${state.qi<state.qz.length-1?`<button onclick="state.qi++;render()">التالي</button>`:`<button onclick="state.qdone=true;render()">إنهاء الاختبار وعرض النتيجة</button>`}</div>`;
+}
+
+render();
+</script>
+</body>
+</html>
